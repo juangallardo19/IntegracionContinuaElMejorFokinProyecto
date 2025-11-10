@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { FaHome, FaCube, FaColumns, FaMicrophone, FaShapes, FaCalculator, FaRuler, FaKey, FaMouse, FaList } from "react-icons/fa";
+import { FaHome, FaCube, FaColumns, FaMicrophone, FaShapes, FaCalculator, FaRuler, FaKey, FaMouse, FaList, FaKeyboard, FaPalette, FaBrain } from "react-icons/fa";
 
 interface SidebarItem {
   label: string;
@@ -24,9 +24,14 @@ const exerciseItems: SidebarItem[] = [
   { label: "Lista de Tareas", route: "/listareas", icon: <FaList /> },
 ];
 
+const educativeItems: SidebarItem[] = [
+  { label: "💻 El Teclado Mágico", route: "/teclado-magico", icon: <FaKeyboard /> },
+];
+
 export default function Sidebar() {
   const [openMain, setOpenMain] = useState(false);
   const [openExercises, setOpenExercises] = useState(false);
+  const [openEducative, setOpenEducative] = useState(true);
 
   const renderNavItem = ({ label, route, icon }: SidebarItem) => (
     <NavLink
@@ -60,13 +65,25 @@ export default function Sidebar() {
         {/* Acordeón Exercises */}
         <button
           onClick={() => setOpenExercises(!openExercises)}
-          className="w-full text-left flex items-center justify-between rounded-lg px-3 py-2 text-slate-700 dark:text-slate-300 
+          className="w-full text-left flex items-center justify-between rounded-lg px-3 py-2 text-slate-700 dark:text-slate-300
                      hover:bg-slate-50 dark:hover:bg-slate-800 font-medium"
         >
           Ejercicios - Jtest
           <span>{openExercises ? "▲" : "▼"}</span>
         </button>
         {openExercises && <div className="pl-4 space-y-1">{exerciseItems.map(renderNavItem)}</div>}
+
+        {/* Acordeón Componentes Educativos */}
+        <button
+          onClick={() => setOpenEducative(!openEducative)}
+          className="w-full text-left flex items-center justify-between rounded-lg px-3 py-2 text-slate-700 dark:text-slate-300
+                     hover:bg-slate-50 dark:hover:bg-slate-800 font-medium"
+          style={{ color: "#00a5b5" }}
+        >
+          🎓 Mentes Creativas
+          <span>{openEducative ? "▲" : "▼"}</span>
+        </button>
+        {openEducative && <div className="pl-4 space-y-1">{educativeItems.map(renderNavItem)}</div>}
 
       </div>
     </aside>
