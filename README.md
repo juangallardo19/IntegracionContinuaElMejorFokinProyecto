@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Clase UCC - Aplicativo React con Vite
 
 ## Descripción
@@ -140,3 +141,6 @@ npm test
 Asignatura: Ingeniería Web
 Clase UCC
 
+=======
+# IntegracionContinuaElMejorFokinProyecto
+>>>>>>> 992648cfce6f5bd87157e0fe2019910620184f6e
