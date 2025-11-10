@@ -16,6 +16,7 @@ import ListaTareas from "../views/ListaTareas";
 
 // Nuevas vistas educativas
 import KeyboardView from "../views/KeyboardView";
+import ColorTheoryView from "../views/ColorTheoryView";
 
 export default function AppRoutes() {
   return (
@@ -35,6 +36,7 @@ export default function AppRoutes() {
 
         {/* Nuevas rutas educativas */}
         <Route path="teclado-magico" element={<KeyboardView />} />
+        <Route path="teoria-color" element={<ColorTheoryView />} />
       </Route>
     </Routes>
   );

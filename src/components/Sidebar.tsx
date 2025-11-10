@@ -26,6 +26,7 @@ const exerciseItems: SidebarItem[] = [
 
 const educativeItems: SidebarItem[] = [
   { label: "💻 El Teclado Mágico", route: "/teclado-magico", icon: <FaKeyboard /> },
+  { label: "🎨 Teoría del Color", route: "/teoria-color", icon: <FaPalette /> },
 ];
 
 export default function Sidebar() {
