@@ -22,7 +22,7 @@ describe("ColorMixer - Teoría del Color", () => {
 
     if (redButton) {
       fireEvent.click(redButton);
-      expect(screen.getByText("✓ Seleccionado")).toBeInTheDocument();
+      expect(screen.getByText("Seleccionado")).toBeInTheDocument();
     }
   });
 

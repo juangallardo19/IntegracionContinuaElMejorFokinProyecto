@@ -2,14 +2,24 @@ import PatternSequence from "../components/PatternSequence";
 
 export default function PatternGameView() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 dark:from-gray-900 dark:to-gray-800 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--gray-100)', padding: '2rem 1rem' }}>
+      <div className="educational-container">
         {/* Hero Section */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: "#00a5b5" }}>
-            🧩 Pensamiento Lógico
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <h1 style={{
+            fontSize: '2.5rem',
+            fontWeight: 'bold',
+            marginBottom: '1rem',
+            color: 'var(--ucc-blue)'
+          }}>
+            Pensamiento Lógico
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p style={{
+            fontSize: '1.125rem',
+            color: 'var(--gray-600)',
+            maxWidth: '42rem',
+            margin: '0 auto'
+          }}>
             Desarrolla tu razonamiento lógico identificando patrones y completando secuencias
           </p>
         </div>
@@ -18,158 +28,105 @@ export default function PatternGameView() {
         <PatternSequence />
 
         {/* Información adicional */}
-        <div className="mt-8 grid md:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md text-center">
-            <div className="text-4xl mb-3">🧠</div>
-            <h3 className="font-bold text-lg mb-2" style={{ color: "#00a5b5" }}>
-              Desarrolla tu mente
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
+        <div className="feature-grid">
+          <div className="feature-card">
+            <svg className="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+              <path d="M12 16a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3Z" />
+            </svg>
+            <h3 className="feature-title">Desarrolla tu Mente</h3>
+            <p className="feature-description">
               Ejercita tu cerebro reconociendo patrones matemáticos y geométricos
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md text-center">
-            <div className="text-4xl mb-3">📈</div>
-            <h3 className="font-bold text-lg mb-2" style={{ color: "#84bd00" }}>
-              Mejora continua
+          <div className="feature-card">
+            <svg className="feature-icon" style={{ color: 'var(--ucc-green)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
+            <h3 className="feature-title" style={{ color: 'var(--ucc-green)' }}>
+              Mejora Continua
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
+            <p className="feature-description">
               Cada patrón completado mejora tus habilidades de razonamiento lógico
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md text-center">
-            <div className="text-4xl mb-3">🎯</div>
-            <h3 className="font-bold text-lg mb-2" style={{ color: "#00a5b5" }}>
-              Precisión y rapidez
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
+          <div className="feature-card">
+            <svg className="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <h3 className="feature-title">Precisión y Rapidez</h3>
+            <p className="feature-description">
               Mejora tu precisión identificando los patrones correctos
             </p>
           </div>
         </div>
 
         {/* Sección educativa */}
-        <div className="mt-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-          <h3 className="font-bold text-xl mb-4 text-center" style={{ color: "#00a5b5" }}>
-            📚 ¿Qué son los patrones?
-          </h3>
+        <div className="educational-card" style={{ marginTop: '2rem' }}>
+          <div className="educational-card-header">
+            <h3 style={{ fontSize: '1.25rem', fontWeight: '600', margin: 0 }}>
+              Qué son los Patrones
+            </h3>
+          </div>
+          <div className="educational-card-body">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div>
+                <h4 style={{ fontWeight: 'bold', fontSize: '1.125rem', marginBottom: '1rem', color: 'var(--ucc-green)' }}>
+                  Patrones Numéricos
+                </h4>
+                <p style={{ fontSize: '0.875rem', marginBottom: '1rem', color: 'var(--gray-700)' }}>
+                  Los patrones numéricos son secuencias de números que siguen una regla específica.
+                  Por ejemplo:
+                </p>
+                <ul className="help-list">
+                  <li><strong>2, 4, 6, 8...</strong> - Suma de 2 en 2</li>
+                  <li><strong>5, 10, 15, 20...</strong> - Suma de 5 en 5</li>
+                  <li><strong>1, 2, 3, 4...</strong> - Números consecutivos</li>
+                </ul>
+              </div>
 
-          <div className="space-y-4 text-gray-700 dark:text-gray-300">
-            <div>
-              <h4 className="font-bold text-lg mb-2" style={{ color: "#84bd00" }}>
-                🔢 Patrones Numéricos
-              </h4>
-              <p className="text-sm mb-2">
-                Los patrones numéricos son secuencias de números que siguen una regla específica.
-                Por ejemplo:
-              </p>
-              <ul className="space-y-1 text-sm pl-4">
-                <li className="flex items-start gap-2">
-                  <span style={{ color: "#84bd00" }}>✓</span>
-                  <span>
-                    <strong>2, 4, 6, 8...</strong> → Suma de 2 en 2
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span style={{ color: "#84bd00" }}>✓</span>
-                  <span>
-                    <strong>5, 10, 15, 20...</strong> → Suma de 5 en 5
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span style={{ color: "#84bd00" }}>✓</span>
-                  <span>
-                    <strong>1, 2, 3, 4...</strong> → Números consecutivos
-                  </span>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold text-lg mb-2" style={{ color: "#00a5b5" }}>
-                🔶 Patrones Geométricos
-              </h4>
-              <p className="text-sm mb-2">
-                Los patrones geométricos usan figuras que se repiten siguiendo un orden. Por ejemplo:
-              </p>
-              <ul className="space-y-1 text-sm pl-4">
-                <li className="flex items-start gap-2">
-                  <span style={{ color: "#84bd00" }}>✓</span>
-                  <span>
-                    <strong>🔵 🟦 🔵 🟦...</strong> → Alternancia de círculo y cuadrado
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span style={{ color: "#84bd00" }}>✓</span>
-                  <span>
-                    <strong>⭐ 🔺 ⭐ 🔺...</strong> → Alternancia de estrella y triángulo
-                  </span>
-                </li>
-              </ul>
+              <div>
+                <h4 style={{ fontWeight: 'bold', fontSize: '1.125rem', marginBottom: '1rem', color: 'var(--ucc-blue)' }}>
+                  Patrones Geométricos
+                </h4>
+                <p style={{ fontSize: '0.875rem', marginBottom: '1rem', color: 'var(--gray-700)' }}>
+                  Los patrones geométricos usan figuras que se repiten siguiendo un orden.
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Tips para mejorar */}
-        <div className="mt-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-lg">
-          <h4 className="font-bold text-lg mb-3 text-center" style={{ color: "#00a5b5" }}>
-            💡 Consejos para identificar patrones
-          </h4>
-          <ul className="space-y-2 text-gray-700 dark:text-gray-300 text-sm">
-            <li className="flex items-start gap-2">
-              <span style={{ color: "#84bd00" }}>1.</span>
-              <span>Observa todos los elementos de la secuencia con atención</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span style={{ color: "#84bd00" }}>2.</span>
-              <span>Busca qué tienen en común los elementos que ves</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span style={{ color: "#84bd00" }}>3.</span>
-              <span>En números: ¿aumentan?, ¿disminuyen?, ¿cuánto cambian?</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span style={{ color: "#84bd00" }}>4.</span>
-              <span>En figuras: ¿se repiten?, ¿cuál es el orden?</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span style={{ color: "#84bd00" }}>5.</span>
-              <span>Practica mucho, ¡cada patrón te hace mejor!</span>
-            </li>
+        <div className="help-section">
+          <h3 className="help-title">Consejos para Identificar Patrones</h3>
+          <ul className="help-list">
+            <li>Observa todos los elementos de la secuencia con atención</li>
+            <li>Busca qué tienen en común los elementos que ves</li>
+            <li>En números: ¿aumentan?, ¿disminuyen?, ¿cuánto cambian?</li>
+            <li>En figuras: ¿se repiten?, ¿cuál es el orden?</li>
+            <li>Practica mucho, cada patrón te hace mejor</li>
           </ul>
         </div>
 
         {/* Beneficios educativos */}
-        <div className="mt-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-          <h4 className="font-bold text-lg mb-3 text-center" style={{ color: "#84bd00" }}>
-            🌟 Beneficios de trabajar con patrones
-          </h4>
-          <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700 dark:text-gray-300">
-            <div className="flex items-start gap-2">
-              <span className="text-2xl">🧠</span>
-              <div>
-                <strong>Desarrollo cognitivo:</strong> Mejora tu capacidad de razonamiento y análisis
-              </div>
+        <div className="info-panel success" style={{ marginTop: '2rem' }}>
+          <h4 className="info-title">Beneficios de Trabajar con Patrones</h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
+            <div>
+              <strong>Desarrollo cognitivo:</strong> Mejora tu capacidad de razonamiento y análisis
             </div>
-            <div className="flex items-start gap-2">
-              <span className="text-2xl">🎯</span>
-              <div>
-                <strong>Concentración:</strong> Aumenta tu atención y enfoque
-              </div>
+            <div>
+              <strong>Concentración:</strong> Aumenta tu atención y enfoque
             </div>
-            <div className="flex items-start gap-2">
-              <span className="text-2xl">📊</span>
-              <div>
-                <strong>Matemáticas:</strong> Fortalece tus bases matemáticas
-              </div>
+            <div>
+              <strong>Matemáticas:</strong> Fortalece tus bases matemáticas
             </div>
-            <div className="flex items-start gap-2">
-              <span className="text-2xl">💡</span>
-              <div>
-                <strong>Resolución de problemas:</strong> Aprende a enfrentar desafíos
-              </div>
+            <div>
+              <strong>Resolución de problemas:</strong> Aprende a enfrentar desafíos
             </div>
           </div>
         </div>

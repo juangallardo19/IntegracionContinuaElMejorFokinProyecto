@@ -25,9 +25,9 @@ const exerciseItems: SidebarItem[] = [
 ];
 
 const educativeItems: SidebarItem[] = [
-  { label: "💻 El Teclado Mágico", route: "/teclado-magico", icon: <FaKeyboard /> },
-  { label: "🎨 Teoría del Color", route: "/teoria-color", icon: <FaPalette /> },
-  { label: "🧩 Secuencias y Patrones", route: "/secuencias-patrones", icon: <FaBrain /> },
+  { label: "Tecnología e Informática", route: "/teclado-magico", icon: <FaKeyboard /> },
+  { label: "Educación Artística", route: "/teoria-color", icon: <FaPalette /> },
+  { label: "Pensamiento Lógico", route: "/secuencias-patrones", icon: <FaBrain /> },
 ];
 
 export default function Sidebar() {
@@ -82,7 +82,7 @@ export default function Sidebar() {
                      hover:bg-slate-50 dark:hover:bg-slate-800 font-medium"
           style={{ color: "#00a5b5" }}
         >
-          🎓 Mentes Creativas
+          Mentes Creativas
           <span>{openEducative ? "▲" : "▼"}</span>
         </button>
         {openEducative && <div className="pl-4 space-y-1">{educativeItems.map(renderNavItem)}</div>}

@@ -11,12 +11,50 @@ interface Pattern {
   explanation: string;
 }
 
-// Formas geométricas
+// Componentes SVG para formas geométricas
+const ShapeSVG = ({ shape }: { shape: string }) => {
+  const shapeStyles = {
+    width: "2rem",
+    height: "2rem",
+    display: "inline-block",
+  };
+
+  switch (shape) {
+    case "circle":
+      return (
+        <svg style={shapeStyles} viewBox="0 0 24 24" fill="#3b82f6">
+          <circle cx="12" cy="12" r="10" />
+        </svg>
+      );
+    case "square":
+      return (
+        <svg style={shapeStyles} viewBox="0 0 24 24" fill="#3b82f6">
+          <rect x="2" y="2" width="20" height="20" />
+        </svg>
+      );
+    case "triangle":
+      return (
+        <svg style={shapeStyles} viewBox="0 0 24 24" fill="#ef4444">
+          <path d="M12 2 L22 22 L2 22 Z" />
+        </svg>
+      );
+    case "star":
+      return (
+        <svg style={shapeStyles} viewBox="0 0 24 24" fill="#fbbf24">
+          <path d="M12 2 L15 9 L22 10 L17 15 L18 22 L12 18 L6 22 L7 15 L2 10 L9 9 Z" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+};
+
+// Formas geométricas (ahora sin emojis)
 const SHAPES = {
-  circle: "🔵",
-  square: "🟦",
-  triangle: "🔺",
-  star: "⭐",
+  circle: "circle",
+  square: "square",
+  triangle: "triangle",
+  star: "star",
 };
 
 // Generar secuencias numéricas
@@ -135,146 +173,170 @@ export default function PatternSequence() {
 
   // Simular sonidos
   const playSuccessSound = () => {
-    console.log("🎉 Sonido de respuesta correcta");
+    console.log("Sonido de respuesta correcta");
   };
 
   const playErrorSound = () => {
-    console.log("❌ Sonido de error");
+    console.log("Sonido de error");
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+    <div className="educational-card">
       {/* Header */}
-      <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold mb-2" style={{ color: "#00a5b5" }}>
-          🧩 Secuencias y Patrones
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400">
-          ¡Descubre el patrón y completa la secuencia!
+      <div className="educational-card-header">
+        <h2>Secuencias y Patrones</h2>
+        <p style={{ fontSize: '0.875rem', marginTop: '0.5rem', opacity: 0.9 }}>
+          Descubre el patrón y completa la secuencia
         </p>
       </div>
 
-      {/* Estadísticas */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg text-center">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Aciertos</p>
-          <p className="text-2xl font-bold" style={{ color: "#84bd00" }}>
-            {score / 10}
-          </p>
+      <div className="educational-card-body">
+        {/* Estadísticas */}
+        <div className="stats-grid">
+          <div className="stat-card">
+            <div className="stat-label">Aciertos</div>
+            <div className="stat-value success">{score / 10}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Intentos</div>
+            <div className="stat-value primary">{attempts}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Precisión</div>
+            <div className="stat-value" style={{ color: 'var(--purple-600)' }}>
+              {attempts > 0 ? Math.round(((score / 10) / attempts) * 100) : 0}%
+            </div>
+          </div>
         </div>
-        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Intentos</p>
-          <p className="text-2xl font-bold" style={{ color: "#00a5b5" }}>
-            {attempts}
-          </p>
-        </div>
-        <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg text-center">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Precisión</p>
-          <p className="text-2xl font-bold text-purple-600">
-            {attempts > 0 ? Math.round(((score / 10) / attempts) * 100) : 0}%
-          </p>
-        </div>
-      </div>
 
-      {/* Tipo de patrón */}
-      <div className="text-center mb-4">
-        <span className="inline-block bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-full text-sm font-semibold">
-          {pattern.type === "numeric" ? "📊 Secuencia Numérica" : "🔶 Patrón Geométrico"}
-        </span>
-      </div>
+        {/* Tipo de patrón */}
+        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+          <span style={{
+            display: 'inline-block',
+            backgroundColor: 'var(--gray-100)',
+            padding: '0.5rem 1rem',
+            borderRadius: '9999px',
+            fontSize: '0.875rem',
+            fontWeight: '600',
+            color: 'var(--gray-700)'
+          }}>
+            {pattern.type === "numeric" ? "Secuencia Numérica" : "Patrón Geométrico"}
+          </span>
+        </div>
 
-      {/* Secuencia */}
-      <div className="flex justify-center items-center gap-3 mb-8">
-        {pattern.sequence.map((item, index) => (
+        {/* Secuencia */}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}>
+          {pattern.sequence.map((item, index) => (
+            <motion.div
+              key={index}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: index * 0.1 }}
+              style={{
+                width: '4rem',
+                height: '4rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '0.5rem',
+                fontWeight: 'bold',
+                fontSize: '1.5rem',
+                backgroundColor: item === "?" ? 'var(--yellow-100)' : 'var(--gray-100)',
+                border: item === "?" ? '2px dashed var(--yellow-400)' : '1px solid var(--gray-300)',
+              }}
+            >
+              {typeof item === 'string' && item !== '?' ? (
+                <ShapeSVG shape={item} />
+              ) : (
+                item
+              )}
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Mensaje de instrucción */}
+        <div className="info-panel" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+          <p className="info-text" style={{ fontSize: '1.125rem', fontWeight: '600', color: 'var(--ucc-blue)' }}>
+            {!selectedAnswer && "¿Qué número o figura falta?"}
+            {isCorrect === true && "Muy bien"}
+            {isCorrect === false && "Intenta de nuevo"}
+          </p>
+        </div>
+
+        {/* Opciones de respuesta */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '1.5rem' }}>
+          {pattern.options.map((option, index) => (
+            <motion.button
+              key={index}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => handleAnswer(option)}
+              disabled={isCorrect === true}
+              style={{
+                height: '4rem',
+                borderRadius: '0.5rem',
+                fontWeight: 'bold',
+                fontSize: '1.25rem',
+                transition: 'all 0.2s',
+                backgroundColor: selectedAnswer === option
+                  ? (isCorrect ? 'var(--green-500)' : 'var(--red-500)')
+                  : 'var(--gray-100)',
+                color: selectedAnswer === option ? 'white' : 'var(--gray-700)',
+                border: '1px solid var(--gray-300)',
+                opacity: isCorrect === true ? 0.5 : 1,
+                cursor: isCorrect === true ? 'not-allowed' : 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {typeof option === 'string' && option !== '?' ? (
+                <ShapeSVG shape={option} />
+              ) : (
+                option
+              )}
+            </motion.button>
+          ))}
+        </div>
+
+        {/* Explicación */}
+        {showExplanation && (
           <motion.div
-            key={index}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: index * 0.1 }}
-            className={`
-              w-16 h-16 flex items-center justify-center rounded-lg font-bold text-2xl
-              ${
-                item === "?"
-                  ? "bg-yellow-100 dark:bg-yellow-900/30 border-2 border-dashed border-yellow-400"
-                  : "bg-gray-100 dark:bg-gray-700"
-              }
-            `}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="info-panel success"
+            style={{ textAlign: 'center' }}
           >
-            {item}
+            <p className="info-text">
+              <strong>Patrón:</strong> {pattern.explanation}
+            </p>
           </motion.div>
-        ))}
-      </div>
+        )}
 
-      {/* Mensaje de instrucción */}
-      <div className="text-center mb-6">
-        <p className="text-lg font-semibold" style={{ color: "#00a5b5" }}>
-          {!selectedAnswer && "¿Qué número o figura falta?"}
-          {isCorrect === true && "¡Muy bien! 🎉"}
-          {isCorrect === false && "Intenta de nuevo 🤔"}
-        </p>
-      </div>
+        {/* Botón para saltar patrón */}
+        {!isCorrect && attempts > 2 && (
+          <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+            <button
+              onClick={generateNewPattern}
+              className="btn btn-primary"
+            >
+              <svg className="icon" style={{ marginRight: '0.5rem' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="23 4 23 10 17 10" />
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+              </svg>
+              Siguiente patrón
+            </button>
+          </div>
+        )}
 
-      {/* Opciones de respuesta */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
-        {pattern.options.map((option, index) => (
-          <motion.button
-            key={index}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => handleAnswer(option)}
-            disabled={isCorrect === true}
-            className={`
-              h-16 rounded-lg font-bold text-xl transition-all
-              ${
-                selectedAnswer === option
-                  ? isCorrect
-                    ? "bg-green-500 text-white"
-                    : "bg-red-500 text-white"
-                  : "bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
-              }
-              ${isCorrect === true ? "opacity-50 cursor-not-allowed" : ""}
-            `}
-          >
-            {option}
-          </motion.button>
-        ))}
-      </div>
-
-      {/* Explicación */}
-      {showExplanation && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg text-center"
-        >
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            <strong>Patrón:</strong> {pattern.explanation}
+        {/* Pista educativa */}
+        <div className="info-panel" style={{ marginTop: '2rem', borderLeftColor: 'var(--blue-500)' }}>
+          <h4 className="info-title">Consejo</h4>
+          <p className="info-text" style={{ textAlign: 'center' }}>
+            Observa bien la secuencia completa. ¿Los números aumentan? ¿Las figuras se repiten?
+            Busca el patrón y elige la respuesta correcta.
           </p>
-        </motion.div>
-      )}
-
-      {/* Botón para saltar patrón */}
-      {!isCorrect && attempts > 2 && (
-        <div className="text-center mt-6">
-          <button
-            onClick={generateNewPattern}
-            className="px-4 py-2 rounded-lg text-white font-semibold text-sm transition-transform hover:scale-105"
-            style={{ backgroundColor: "#00a5b5" }}
-          >
-            ⏭️ Siguiente patrón
-          </button>
         </div>
-      )}
-
-      {/* Pista educativa */}
-      <div className="mt-8 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-        <h4 className="font-bold text-sm mb-2 text-center" style={{ color: "#00a5b5" }}>
-          💡 Consejo
-        </h4>
-        <p className="text-xs text-center text-gray-700 dark:text-gray-300">
-          Observa bien la secuencia completa. ¿Los números aumentan? ¿Las figuras se repiten?
-          Busca el patrón y elige la respuesta correcta.
-        </p>
       </div>
     </div>
   );
