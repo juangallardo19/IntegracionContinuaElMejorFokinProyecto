@@ -2,14 +2,24 @@ import ColorMixer from "../components/ColorMixer";
 
 export default function ColorTheoryView() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--gray-100)', padding: '2rem 1rem' }}>
+      <div className="educational-container">
         {/* Hero Section */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: "#00a5b5" }}>
-            🎨 Educación Artística
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <h1 style={{
+            fontSize: '2.5rem',
+            fontWeight: 'bold',
+            marginBottom: '1rem',
+            color: 'var(--ucc-blue)'
+          }}>
+            Educación Artística
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p style={{
+            fontSize: '1.125rem',
+            color: 'var(--gray-600)',
+            maxWidth: '42rem',
+            margin: '0 auto'
+          }}>
             Descubre el fascinante mundo del color y aprende cómo se crean los diferentes tonos
           </p>
         </div>
@@ -18,105 +28,83 @@ export default function ColorTheoryView() {
         <ColorMixer />
 
         {/* Información adicional */}
-        <div className="mt-8 grid md:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md text-center">
-            <div className="text-4xl mb-3">🎨</div>
-            <h3 className="font-bold text-lg mb-2" style={{ color: "#00a5b5" }}>
-              Aprende jugando
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
+        <div className="feature-grid">
+          <div className="feature-card">
+            <svg className="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 6v6l4 2" />
+            </svg>
+            <h3 className="feature-title">Aprende Jugando</h3>
+            <p className="feature-description">
               Experimenta con las mezclas y descubre nuevos colores de forma divertida
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md text-center">
-            <div className="text-4xl mb-3">🌈</div>
-            <h3 className="font-bold text-lg mb-2" style={{ color: "#84bd00" }}>
-              Teoría práctica
+          <div className="feature-card">
+            <svg className="feature-icon" style={{ color: 'var(--ucc-green)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+            <h3 className="feature-title" style={{ color: 'var(--ucc-green)' }}>
+              Teoría Práctica
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
+            <p className="feature-description">
               Comprende cómo funcionan los colores primarios y secundarios
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md text-center">
-            <div className="text-4xl mb-3">✨</div>
-            <h3 className="font-bold text-lg mb-2" style={{ color: "#00a5b5" }}>
-              Creatividad
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
-              Desarrolla tu creatividad explorando todas las combinaciones posibles
+          <div className="feature-card">
+            <svg className="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+              <line x1="12" y1="22.08" x2="12" y2="12" />
+            </svg>
+            <h3 className="feature-title">Desarrolla Creatividad</h3>
+            <p className="feature-description">
+              Explora todas las combinaciones posibles y desarrolla tu creatividad
             </p>
           </div>
         </div>
 
         {/* Sección educativa sobre la teoría del color */}
-        <div className="mt-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-          <h3 className="font-bold text-xl mb-4 text-center" style={{ color: "#00a5b5" }}>
-            📚 Aprende sobre los colores
-          </h3>
+        <div className="educational-card" style={{ marginTop: '2rem' }}>
+          <div className="educational-card-header">
+            <h3 style={{ fontSize: '1.25rem', fontWeight: '600', margin: 0 }}>Aprende sobre los Colores</h3>
+          </div>
+          <div className="educational-card-body">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+              {/* Colores primarios */}
+              <div>
+                <h4 style={{ fontWeight: 'bold', fontSize: '1.125rem', marginBottom: '1rem', color: 'var(--red-500)' }}>
+                  Colores Primarios
+                </h4>
+                <ul className="help-list">
+                  <li>Son los colores base que no se pueden crear mezclando otros</li>
+                  <li>Los tres colores primarios son: Rojo, Azul y Amarillo</li>
+                  <li>Con estos tres colores puedes crear muchos otros</li>
+                </ul>
+              </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Colores primarios */}
-            <div>
-              <h4 className="font-bold text-lg mb-3" style={{ color: "#ef4444" }}>
-                🔴 Colores Primarios
-              </h4>
-              <ul className="space-y-2 text-gray-700 dark:text-gray-300">
-                <li className="flex items-start gap-2">
-                  <span style={{ color: "#84bd00" }}>✓</span>
-                  <span>
-                    Son los <strong>colores base</strong> que no se pueden crear mezclando otros
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span style={{ color: "#84bd00" }}>✓</span>
-                  <span>Los tres colores primarios son: Rojo, Azul y Amarillo</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span style={{ color: "#84bd00" }}>✓</span>
-                  <span>Con estos tres colores puedes crear muchos otros</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Colores secundarios */}
-            <div>
-              <h4 className="font-bold text-lg mb-3" style={{ color: "#22c55e" }}>
-                🟢 Colores Secundarios
-              </h4>
-              <ul className="space-y-2 text-gray-700 dark:text-gray-300">
-                <li className="flex items-start gap-2">
-                  <span style={{ color: "#84bd00" }}>✓</span>
-                  <span>
-                    <strong>Rojo + Azul =</strong> Morado
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span style={{ color: "#84bd00" }}>✓</span>
-                  <span>
-                    <strong>Rojo + Amarillo =</strong> Naranja
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span style={{ color: "#84bd00" }}>✓</span>
-                  <span>
-                    <strong>Azul + Amarillo =</strong> Verde
-                  </span>
-                </li>
-              </ul>
+              {/* Colores secundarios */}
+              <div>
+                <h4 style={{ fontWeight: 'bold', fontSize: '1.125rem', marginBottom: '1rem', color: 'var(--green-500)' }}>
+                  Colores Secundarios
+                </h4>
+                <ul className="help-list">
+                  <li><strong>Rojo + Azul =</strong> Morado</li>
+                  <li><strong>Rojo + Amarillo =</strong> Naranja</li>
+                  <li><strong>Azul + Amarillo =</strong> Verde</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Curiosidades del color */}
-        <div className="mt-6 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 p-6 rounded-lg">
-          <h4 className="font-bold text-lg mb-3 text-center" style={{ color: "#f97316" }}>
-            💡 ¿Sabías que...?
-          </h4>
-          <p className="text-gray-700 dark:text-gray-300 text-center">
+        <div className="info-panel warning" style={{ marginTop: '2rem' }}>
+          <h4 className="info-title">Dato Interesante</h4>
+          <p className="info-text">
             Los artistas usan la <strong>rueda cromática</strong> para entender mejor las relaciones
-            entre los colores. ¡Sigue practicando y conviértete en un experto del color!
+            entre los colores. Sigue practicando y conviértete en un experto del color.
           </p>
         </div>
       </div>
