@@ -12,18 +12,16 @@ export default function HomeContent() {
           transition={{ duration: 0.8 }}
           style={{ textAlign: 'center', marginBottom: '3rem' }}
         >
-          {/* Logo Educativo */}
-          <img
-            src="/logo.png"
-            alt="Logo Mentes Creativas"
-            style={{
-              width: '8rem',
-              height: '8rem',
-              margin: '0 auto 1.5rem',
-              objectFit: 'contain',
-              borderRadius: '1rem'
-            }}
-          />
+          {/* SVG Logo Educativo */}
+          <svg
+            style={{ width: '8rem', height: '8rem', margin: '0 auto 1.5rem' }}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--ucc-blue)"
+            strokeWidth="1.5"
+          >
+            <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
 
           <h1 style={{
             fontSize: '3rem',
