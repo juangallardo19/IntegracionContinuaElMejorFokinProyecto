@@ -72,11 +72,11 @@ export default function ColorMixer() {
 
   // Simular sonidos
   const playColorSound = () => {
-    console.log("🎵 Sonido de selección de color");
+    console.log("Sonido de selección de color");
   };
 
   const playSuccessSound = () => {
-    console.log("🎉 Sonido de mezcla exitosa");
+    console.log("Sonido de mezcla exitosa");
   };
 
   // Reiniciar mezcla
@@ -88,187 +88,171 @@ export default function ColorMixer() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+    <div className="educational-card">
       {/* Header */}
-      <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold mb-2" style={{ color: "#00a5b5" }}>
-          🎨 Teoría del Color
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400">
-          ¡Mezcla colores primarios y descubre los secundarios!
+      <div className="educational-card-header">
+        <h2>Teoría del Color</h2>
+        <p style={{ fontSize: '0.875rem', marginTop: '0.5rem', opacity: 0.9 }}>
+          Mezcla colores primarios y descubre los secundarios
         </p>
       </div>
 
-      {/* Puntuación */}
-      <div className="text-center mb-6">
-        <div className="inline-block bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 px-6 py-3 rounded-lg">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Mezclas realizadas</p>
-          <p className="text-3xl font-bold" style={{ color: "#84bd00" }}>
-            {score / 10}
+      <div className="educational-card-body">
+        {/* Puntuación */}
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div className="stat-card" style={{ display: 'inline-block', minWidth: '200px' }}>
+            <div className="stat-label">Mezclas Realizadas</div>
+            <div className="stat-value success">{score / 10}</div>
+          </div>
+        </div>
+
+        {/* Instrucciones */}
+        <div className="info-panel" style={{ marginBottom: '2rem', textAlign: 'center' }}>
+          <p className="info-text">
+            {!selectedColor1 && "Selecciona el primer color primario"}
+            {selectedColor1 && !selectedColor2 && "Ahora selecciona un segundo color diferente"}
+            {selectedColor1 && selectedColor2 && showAnimation && "Mezclando colores..."}
+            {selectedColor1 && selectedColor2 && !showAnimation && mixedColor && "Mira el resultado"}
           </p>
         </div>
-      </div>
 
-      {/* Instrucciones */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mb-6">
-        <p className="text-center text-sm text-gray-700 dark:text-gray-300">
-          {!selectedColor1 && "👆 Selecciona el primer color primario"}
-          {selectedColor1 && !selectedColor2 && "👆 Ahora selecciona un segundo color diferente"}
-          {selectedColor1 && selectedColor2 && showAnimation && "✨ ¡Mezclando colores!"}
-          {selectedColor1 && selectedColor2 && !showAnimation && mixedColor && "🎉 ¡Mira el resultado!"}
-        </p>
-      </div>
+        {/* Colores primarios */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+          {Object.entries(PRIMARY_COLORS).map(([key, color]) => (
+            <motion.button
+              key={key}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                if (!selectedColor1) {
+                  handleSelectColor1(key as ColorKey);
+                } else if (!selectedColor2) {
+                  handleSelectColor2(key as ColorKey);
+                }
+              }}
+              disabled={selectedColor1 === key}
+              className={`
+                relative h-32 rounded-2xl shadow-lg transition-all
+                ${selectedColor1 === key ? "ring-4 ring-offset-2 ring-[#00a5b5]" : "hover:shadow-xl"}
+                ${selectedColor1 === key && "opacity-75"}
+              `}
+              style={{
+                backgroundColor: color.hex,
+              }}
+            >
+              <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ color: 'white', fontWeight: 'bold', fontSize: '1.25rem', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
+                  {color.name}
+                </span>
+                {selectedColor1 === key && (
+                  <span style={{ color: 'white', fontSize: '0.875rem', marginTop: '0.5rem' }}>Seleccionado</span>
+                )}
+              </div>
+            </motion.button>
+          ))}
+        </div>
 
-      {/* Colores primarios */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        {Object.entries(PRIMARY_COLORS).map(([key, color]) => (
-          <motion.button
-            key={key}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => {
-              if (!selectedColor1) {
-                handleSelectColor1(key as ColorKey);
-              } else if (!selectedColor2) {
-                handleSelectColor2(key as ColorKey);
-              }
-            }}
-            disabled={selectedColor1 === key}
-            className={`
-              relative h-32 rounded-2xl shadow-lg transition-all
-              ${selectedColor1 === key ? "ring-4 ring-offset-2 ring-[#00a5b5]" : "hover:shadow-xl"}
-              ${selectedColor1 === key && "opacity-75"}
-            `}
-            style={{
-              backgroundColor: color.hex,
-            }}
-          >
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-white font-bold text-xl drop-shadow-lg">
-                {color.name}
-              </span>
-              {selectedColor1 === key && (
-                <span className="text-white text-sm mt-2">✓ Seleccionado</span>
-              )}
-            </div>
-          </motion.button>
-        ))}
-      </div>
-
-      {/* Área de mezcla */}
-      <AnimatePresence>
-        {selectedColor1 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="mb-6"
-          >
-            <div className="flex items-center justify-center gap-4">
-              {/* Primer color seleccionado */}
-              <motion.div
-                animate={showAnimation ? { x: [0, 50, 0] } : {}}
-                transition={{ duration: 1, repeat: showAnimation ? Infinity : 0 }}
-                className="w-20 h-20 rounded-full shadow-lg"
-                style={{ backgroundColor: PRIMARY_COLORS[selectedColor1].hex }}
-              />
-
-              <span className="text-3xl font-bold" style={{ color: "#00a5b5" }}>
-                +
-              </span>
-
-              {/* Segundo color o placeholder */}
-              {selectedColor2 ? (
+        {/* Área de mezcla */}
+        <AnimatePresence>
+          {selectedColor1 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              style={{ marginBottom: '2rem' }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                {/* Primer color seleccionado */}
                 <motion.div
-                  animate={showAnimation ? { x: [0, -50, 0] } : {}}
+                  animate={showAnimation ? { x: [0, 50, 0] } : {}}
                   transition={{ duration: 1, repeat: showAnimation ? Infinity : 0 }}
-                  className="w-20 h-20 rounded-full shadow-lg"
-                  style={{ backgroundColor: PRIMARY_COLORS[selectedColor2].hex }}
+                  style={{ width: '5rem', height: '5rem', borderRadius: '50%', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', backgroundColor: PRIMARY_COLORS[selectedColor1].hex }}
                 />
-              ) : (
-                <div className="w-20 h-20 rounded-full border-4 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center">
-                  <span className="text-gray-400 text-2xl">?</span>
-                </div>
-              )}
 
-              <span className="text-3xl font-bold" style={{ color: "#00a5b5" }}>
-                =
-              </span>
+                <span style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--ucc-blue)' }}>
+                  +
+                </span>
 
-              {/* Color resultante */}
-              {mixedColor ? (
+                {/* Segundo color o placeholder */}
+                {selectedColor2 ? (
+                  <motion.div
+                    animate={showAnimation ? { x: [0, -50, 0] } : {}}
+                    transition={{ duration: 1, repeat: showAnimation ? Infinity : 0 }}
+                    style={{ width: '5rem', height: '5rem', borderRadius: '50%', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', backgroundColor: PRIMARY_COLORS[selectedColor2].hex }}
+                  />
+                ) : (
+                  <div style={{ width: '5rem', height: '5rem', borderRadius: '50%', border: '4px dashed var(--gray-300)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ color: 'var(--gray-400)', fontSize: '2rem' }}>?</span>
+                  </div>
+                )}
+
+                <span style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--ucc-blue)' }}>
+                  =
+                </span>
+
+                {/* Color resultante */}
+                {mixedColor ? (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    style={{ width: '6rem', height: '6rem', borderRadius: '50%', boxShadow: '0 8px 16px rgba(0,0,0,0.2)', backgroundColor: mixedColor }}
+                  />
+                ) : (
+                  <div style={{ width: '6rem', height: '6rem', borderRadius: '50%', border: '4px dashed var(--gray-300)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ color: 'var(--gray-400)', fontSize: '2rem' }}>?</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Nombre del color resultante */}
+              {colorName && (
                 <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="w-24 h-24 rounded-full shadow-xl"
-                  style={{ backgroundColor: mixedColor }}
-                />
-              ) : (
-                <div className="w-24 h-24 rounded-full border-4 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center">
-                  <span className="text-gray-400 text-2xl">?</span>
-                </div>
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  style={{ textAlign: 'center', marginTop: '1rem' }}
+                >
+                  <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--ucc-green)' }}>
+                    Creaste {colorName}
+                  </p>
+                </motion.div>
               )}
-            </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-            {/* Nombre del color resultante */}
-            {colorName && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="text-center mt-4"
-              >
-                <p className="text-2xl font-bold" style={{ color: "#84bd00" }}>
-                  ¡Creaste {colorName}! 🎨
-                </p>
-              </motion.div>
-            )}
-          </motion.div>
+        {/* Botón para reiniciar */}
+        {selectedColor1 && (
+          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+            <button
+              onClick={resetMix}
+              className="btn btn-primary"
+            >
+              <svg className="icon" style={{ marginRight: '0.5rem' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="23 4 23 10 17 10" />
+                <polyline points="1 20 1 14 7 14" />
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+              </svg>
+              Mezclar otros colores
+            </button>
+          </div>
         )}
-      </AnimatePresence>
 
-      {/* Botón para reiniciar */}
-      {selectedColor1 && (
-        <div className="text-center mt-6">
-          <button
-            onClick={resetMix}
-            className="px-6 py-3 rounded-lg text-white font-bold transition-transform hover:scale-105"
-            style={{ backgroundColor: "#00a5b5" }}
-          >
-            🔄 Mezclar otros colores
-          </button>
-        </div>
-      )}
+        {/* Información educativa */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginTop: '2rem' }}>
+          <div className="info-panel" style={{ borderLeftColor: 'var(--red-500)' }}>
+            <h4 className="info-title">Colores Primarios</h4>
+            <p className="info-text">Rojo, Azul y Amarillo no se pueden crear mezclando</p>
+          </div>
 
-      {/* Información educativa */}
-      <div className="mt-8 grid md:grid-cols-3 gap-4">
-        <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg text-center">
-          <div className="text-3xl mb-2">🔴</div>
-          <h4 className="font-bold text-sm mb-1" style={{ color: "#ef4444" }}>
-            Colores Primarios
-          </h4>
-          <p className="text-xs text-gray-600 dark:text-gray-400">
-            Rojo, Azul y Amarillo no se pueden crear mezclando
-          </p>
-        </div>
+          <div className="info-panel success">
+            <h4 className="info-title">Colores Secundarios</h4>
+            <p className="info-text">Verde, Naranja y Morado se crean mezclando primarios</p>
+          </div>
 
-        <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg text-center">
-          <div className="text-3xl mb-2">🟢</div>
-          <h4 className="font-bold text-sm mb-1" style={{ color: "#22c55e" }}>
-            Colores Secundarios
-          </h4>
-          <p className="text-xs text-gray-600 dark:text-gray-400">
-            Verde, Naranja y Morado se crean mezclando primarios
-          </p>
-        </div>
-
-        <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg text-center">
-          <div className="text-3xl mb-2">🌈</div>
-          <h4 className="font-bold text-sm mb-1" style={{ color: "#a855f7" }}>
-            ¡Experimenta!
-          </h4>
-          <p className="text-xs text-gray-600 dark:text-gray-400">
-            Prueba todas las combinaciones posibles
-          </p>
+          <div className="info-panel" style={{ borderLeftColor: 'var(--blue-500)' }}>
+            <h4 className="info-title">Experimenta</h4>
+            <p className="info-text">Prueba todas las combinaciones posibles</p>
+          </div>
         </div>
       </div>
     </div>
