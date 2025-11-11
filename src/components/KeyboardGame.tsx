@@ -28,7 +28,7 @@ export default function KeyboardGame() {
     setCurrentLetterIndex(0);
     setScore(0);
     setErrors(0);
-    setMessage("¡Presiona las teclas correctas!");
+    setMessage("Presiona las teclas correctas");
     setIsPlaying(true);
   };
 
@@ -49,26 +49,26 @@ export default function KeyboardGame() {
         // Tecla correcta
         playSuccessSound();
         setScore(prev => prev + 10);
-        setMessage("¡Muy bien! ✨");
+        setMessage("Correcto");
 
         // Avanzar a la siguiente letra
         if (currentLetterIndex + 1 < currentWord.length) {
           setCurrentLetterIndex(prev => prev + 1);
         } else {
           // Palabra completada
-          setMessage("¡Palabra completada! 🎉");
+          setMessage("Palabra completada");
           setTimeout(() => {
             const newWord = PRACTICE_WORDS[Math.floor(Math.random() * PRACTICE_WORDS.length)];
             setCurrentWord(newWord);
             setCurrentLetterIndex(0);
-            setMessage("¡Nueva palabra!");
+            setMessage("Nueva palabra");
           }, 1500);
         }
       } else {
         // Tecla incorrecta
         playErrorSound();
         setErrors(prev => prev + 1);
-        setMessage("Intenta de nuevo 🤔");
+        setMessage("Intenta de nuevo");
       }
     };
 
@@ -78,14 +78,12 @@ export default function KeyboardGame() {
 
   // Simular sonido de éxito
   const playSuccessSound = () => {
-    // En una implementación real, usaríamos Web Audio API
-    console.log("🎵 Sonido de éxito");
+    console.log("Sonido de éxito");
   };
 
   // Simular sonido de error
   const playErrorSound = () => {
-    // En una implementación real, usaríamos Web Audio API
-    console.log("🔊 Sonido de error");
+    console.log("Sonido de error");
   };
 
   // Verificar si una tecla debe estar resaltada
@@ -99,118 +97,124 @@ export default function KeyboardGame() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+    <div className="educational-card">
       {/* Header */}
-      <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold mb-2" style={{ color: "#00a5b5" }}>
-          💻 El Teclado Mágico
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400">
-          ¡Aprende a escribir presionando las teclas correctas!
+      <div className="educational-card-header">
+        <h2>El Teclado Mágico</h2>
+        <p style={{ fontSize: '0.875rem', marginTop: '0.5rem', opacity: 0.9 }}>
+          Aprende a escribir presionando las teclas correctas
         </p>
       </div>
 
-      {/* Botón de inicio */}
-      {!isPlaying && (
-        <div className="text-center mb-6">
-          <button
-            onClick={startGame}
-            className="px-6 py-3 rounded-lg text-white font-bold text-lg transition-transform hover:scale-105"
-            style={{ backgroundColor: "#84bd00" }}
-          >
-            🚀 Comenzar a Practicar
-          </button>
-        </div>
-      )}
-
-      {/* Panel de información */}
-      {isPlaying && (
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">Puntos</p>
-            <p className="text-2xl font-bold" style={{ color: "#00a5b5" }}>
-              {score}
-            </p>
-          </div>
-          <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">Errores</p>
-            <p className="text-2xl font-bold text-red-500">{errors}</p>
-          </div>
-          <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">Precisión</p>
-            <p className="text-2xl font-bold" style={{ color: "#84bd00" }}>
-              {score + errors > 0 ? Math.round((score / (score + errors * 10)) * 100) : 0}%
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Mensaje de retroalimentación */}
-      {isPlaying && (
-        <div className="text-center mb-6">
-          <p className="text-xl font-semibold" style={{ color: "#00a5b5" }}>
-            {message}
-          </p>
-        </div>
-      )}
-
-      {/* Palabra a escribir */}
-      {isPlaying && (
-        <div className="flex justify-center gap-2 mb-8">
-          {currentWord.split("").map((letter, index) => (
-            <div
-              key={index}
-              className={`
-                w-12 h-16 flex items-center justify-center text-3xl font-bold rounded-lg
-                ${isLetterTyped(index) ? "bg-green-100 text-green-700" : "bg-gray-100 dark:bg-gray-700"}
-                ${index === currentLetterIndex ? "ring-4 ring-blue-400 animate-pulse" : ""}
-              `}
+      <div className="educational-card-body">
+        {/* Botón de inicio */}
+        {!isPlaying && (
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <button
+              onClick={startGame}
+              className="btn btn-success"
+              style={{ fontSize: '1.125rem', padding: '1rem 2rem' }}
             >
-              {letter}
-            </div>
-          ))}
-        </div>
-      )}
+              <svg className="icon" style={{ marginRight: '0.5rem' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              Comenzar a Practicar
+            </button>
+          </div>
+        )}
 
-      {/* Teclado visual */}
-      {isPlaying && (
-        <div className="space-y-2">
-          {KEYBOARD_LAYOUT.map((row, rowIndex) => (
-            <div key={rowIndex} className="flex justify-center gap-1">
-              {row.map((key) => (
+        {/* Panel de información */}
+        {isPlaying && (
+          <>
+            <div className="stats-grid">
+              <div className="stat-card">
+                <div className="stat-label">Puntos</div>
+                <div className="stat-value primary">{score}</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-label">Errores</div>
+                <div className="stat-value danger">{errors}</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-label">Precisión</div>
+                <div className="stat-value success">
+                  {score + errors > 0 ? Math.round((score / (score + errors * 10)) * 100) : 0}%
+                </div>
+              </div>
+            </div>
+
+            {/* Mensaje de retroalimentación */}
+            <div className="info-panel" style={{ textAlign: 'center', marginBottom: '2rem' }}>
+              <p className="info-text" style={{ fontSize: '1.125rem', fontWeight: '600', color: 'var(--ucc-blue)' }}>
+                {message}
+              </p>
+            </div>
+
+            {/* Palabra a escribir */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '2rem' }}>
+              {currentWord.split("").map((letter, index) => (
                 <div
-                  key={key}
-                  className={`
-                    w-12 h-12 flex items-center justify-center text-lg font-bold rounded-lg
-                    transition-all duration-200
-                    ${
-                      isKeyHighlighted(key)
-                        ? "ring-4 ring-yellow-400 animate-bounce text-white"
-                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                    }
-                  `}
-                  style={
-                    isKeyHighlighted(key)
-                      ? { backgroundColor: "#84bd00" }
-                      : {}
-                  }
+                  key={index}
+                  style={{
+                    width: '3rem',
+                    height: '4rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1.875rem',
+                    fontWeight: 'bold',
+                    borderRadius: '0.5rem',
+                    backgroundColor: isLetterTyped(index) ? 'var(--ucc-green)' : 'var(--gray-200)',
+                    color: isLetterTyped(index) ? 'white' : 'var(--gray-700)',
+                    border: index === currentLetterIndex ? '3px solid var(--ucc-blue)' : '1px solid var(--gray-300)',
+                    boxShadow: index === currentLetterIndex ? '0 0 0 3px rgba(0, 165, 181, 0.2)' : 'none',
+                  }}
                 >
-                  {key}
+                  {letter}
                 </div>
               ))}
             </div>
-          ))}
-        </div>
-      )}
 
-      {/* Instrucciones */}
-      {isPlaying && (
-        <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-          <p className="text-sm text-center text-gray-700 dark:text-gray-300">
-            👀 Mira la tecla que brilla y presiónala en tu teclado
-          </p>
-        </div>
-      )}
+            {/* Teclado visual */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxWidth: '600px', margin: '0 auto' }}>
+              {KEYBOARD_LAYOUT.map((row, rowIndex) => (
+                <div key={rowIndex} style={{ display: 'flex', justifyContent: 'center', gap: '0.25rem' }}>
+                  {row.map((key) => (
+                    <div
+                      key={key}
+                      style={{
+                        width: '3rem',
+                        height: '3rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1.125rem',
+                        fontWeight: 'bold',
+                        borderRadius: '0.375rem',
+                        backgroundColor: isKeyHighlighted(key) ? 'var(--ucc-green)' : 'var(--gray-200)',
+                        color: isKeyHighlighted(key) ? 'white' : 'var(--gray-700)',
+                        border: '1px solid var(--gray-300)',
+                        boxShadow: isKeyHighlighted(key) ? '0 4px 8px rgba(132, 189, 0, 0.3)' : '0 1px 2px rgba(0, 0, 0, 0.05)',
+                        transform: isKeyHighlighted(key) ? 'scale(1.1)' : 'scale(1)',
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      {key}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+
+            {/* Instrucciones */}
+            <div className="info-panel" style={{ marginTop: '2rem' }}>
+              <p className="info-text" style={{ textAlign: 'center' }}>
+                Observa la tecla resaltada en verde y presiónala en tu teclado
+              </p>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }
