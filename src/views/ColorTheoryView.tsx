@@ -161,9 +161,6 @@ export default function ColorTheoryView() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
               <div>
                 <h4 style={{ fontWeight: 'bold', fontSize: '1.125rem', marginBottom: '1rem', color: '#dc2626' }}>
-                  <svg style={{ width: '1.25rem', height: '1.25rem', display: 'inline-block', marginRight: '0.5rem', verticalAlign: 'middle' }} viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/>
-                  </svg>
                   Colores Cálidos
                 </h4>
                 <ul className="help-list">
@@ -176,9 +173,6 @@ export default function ColorTheoryView() {
 
               <div>
                 <h4 style={{ fontWeight: 'bold', fontSize: '1.125rem', marginBottom: '1rem', color: '#2563eb' }}>
-                  <svg style={{ width: '1.25rem', height: '1.25rem', display: 'inline-block', marginRight: '0.5rem', verticalAlign: 'middle' }} viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm-1 15v2h2v-2h-2zm0-2h2v-1.5h-2V15zm3-4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-                  </svg>
                   Colores Fríos
                 </h4>
                 <ul className="help-list">

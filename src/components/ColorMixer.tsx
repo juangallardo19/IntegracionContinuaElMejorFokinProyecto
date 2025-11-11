@@ -453,11 +453,8 @@ export default function ColorMixer() {
                   if (!colorKey) return null;
 
                   const color = SECONDARY_COLORS[colorKey];
-                  const colorRgb = mixColors(
-                    colorKey === 'purple' ? PRIMARY_COLORS.red.rgb : colorKey === 'orange' ? PRIMARY_COLORS.red.rgb : PRIMARY_COLORS.blue.rgb,
-                    colorKey === 'purple' ? PRIMARY_COLORS.blue.rgb : colorKey === 'orange' ? PRIMARY_COLORS.yellow.rgb : PRIMARY_COLORS.yellow.rgb,
-                    0.5
-                  );
+                  // Usar el color RGB predefinido en lugar de calcularlo
+                  const colorRgb = `rgb(${color.rgb[0]}, ${color.rgb[1]}, ${color.rgb[2]})`;
 
                   return (
                     <motion.button
@@ -505,12 +502,24 @@ export default function ColorMixer() {
                   style={{ marginTop: '2rem' }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-                    <div style={{ width: '4rem', height: '4rem', borderRadius: '50%', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', backgroundColor: mixColors(SECONDARY_COLORS[selectedSecondary1].rgb, SECONDARY_COLORS[selectedSecondary1].rgb, 0.5) }} />
+                    <div style={{
+                      width: '4rem',
+                      height: '4rem',
+                      borderRadius: '50%',
+                      boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                      backgroundColor: `rgb(${SECONDARY_COLORS[selectedSecondary1].rgb[0]}, ${SECONDARY_COLORS[selectedSecondary1].rgb[1]}, ${SECONDARY_COLORS[selectedSecondary1].rgb[2]})`
+                    }} />
 
                     <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--ucc-blue)' }}>+</span>
 
                     {selectedSecondary2 ? (
-                      <div style={{ width: '4rem', height: '4rem', borderRadius: '50%', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', backgroundColor: mixColors(SECONDARY_COLORS[selectedSecondary2].rgb, SECONDARY_COLORS[selectedSecondary2].rgb, 0.5) }} />
+                      <div style={{
+                        width: '4rem',
+                        height: '4rem',
+                        borderRadius: '50%',
+                        boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                        backgroundColor: `rgb(${SECONDARY_COLORS[selectedSecondary2].rgb[0]}, ${SECONDARY_COLORS[selectedSecondary2].rgb[1]}, ${SECONDARY_COLORS[selectedSecondary2].rgb[2]})`
+                      }} />
                     ) : (
                       <div style={{ width: '4rem', height: '4rem', borderRadius: '50%', border: '4px dashed var(--gray-300)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <span style={{ color: 'var(--gray-400)', fontSize: '1.5rem' }}>?</span>
