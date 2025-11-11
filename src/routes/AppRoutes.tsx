@@ -14,6 +14,11 @@ import ValidContrasena from "../views/ValidContrasena";
 import ContadorClics from "../views/ContadorClics";
 import ListaTareas from "../views/ListaTareas";
 
+// Nuevas vistas educativas
+import KeyboardView from "../views/KeyboardView";
+import ColorTheoryView from "../views/ColorTheoryView";
+import PatternGameView from "../views/PatternGameView";
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -29,6 +34,11 @@ export default function AppRoutes() {
         <Route path="validcontrasena" element={<ValidContrasena />} />
         <Route path="contadorclics" element={<ContadorClics />} />
         <Route path="listareas" element={<ListaTareas />} />
+
+        {/* Nuevas rutas educativas */}
+        <Route path="teclado-magico" element={<KeyboardView />} />
+        <Route path="teoria-color" element={<ColorTheoryView />} />
+        <Route path="secuencias-patrones" element={<PatternGameView />} />
       </Route>
     </Routes>
   );
