@@ -4,17 +4,21 @@ import Navbar from "./Navbar";
 
 export default function Layout() {
   return (
-    <div className="flex h-screen">
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
       {/* Sidebar */}
       <Sidebar />
 
       {/* Contenedor principal */}
-      <div className="flex flex-col flex-1">
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
         {/* Navbar arriba */}
         <Navbar />
 
         {/* Contenido dinámico (cada vista) */}
-        <main className="flex-1 overflow-y-auto p-4 bg-slate-50 dark:bg-slate-900">
+        <main style={{
+          flex: 1,
+          overflowY: 'auto',
+          backgroundColor: 'var(--gray-100)'
+        }}>
           <Outlet />
         </main>
       </div>
