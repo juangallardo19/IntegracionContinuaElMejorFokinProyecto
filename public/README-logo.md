@@ -11,6 +11,7 @@ Por favor, coloca el archivo **logo.png** en esta carpeta (`public/`).
 - **Uso**:
   - Favicon en la pestaña del navegador
   - Logo en el Sidebar (40x40 px)
+  - Logo en la página de inicio - HomePage (128x128 px)
 
 ### Ubicación:
 ```
@@ -21,10 +22,10 @@ public/
 Una vez agregues el logo, este aparecerá automáticamente en:
 - ✅ Pestaña del navegador (favicon)
 - ✅ Sidebar lateral
+- ✅ Página de inicio (hero section)
 
 ### Nota Importante:
-El Navbar y la página de inicio (HomePage) usan un icono SVG de libro, NO el logo.png.
-Solo el Sidebar y el favicon usan logo.png.
+El Navbar usa un icono SVG de libro, NO el logo.png.
 
 ## Nota para el Equipo de Desarrollo
 Si aún no tienes el logo, puedes usar temporalmente cualquier imagen PNG como placeholder.
