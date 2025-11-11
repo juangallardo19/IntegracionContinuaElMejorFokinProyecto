@@ -9,9 +9,9 @@ beforeEach(() => {
 
 // --- Pruebas de renderizado ---
 describe("Navbar - Renderizado", () => {
-  test("renderiza el título principal 'UCC : Prácticas Desarrollo'", () => {
+  test("renderiza el título principal 'Mentes Creativas'", () => {
     render(<Navbar />);
-    expect(screen.getByText(/UCC : Prácticas Desarrollo/i)).toBeInTheDocument();
+    expect(screen.getByText(/Mentes Creativas/i)).toBeInTheDocument();
   });
 
   test("renderiza el botón con el texto 'Tema'", () => {
