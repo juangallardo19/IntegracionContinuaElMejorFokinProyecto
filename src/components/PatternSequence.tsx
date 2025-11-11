@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 // Tipos de patrones
@@ -51,7 +51,7 @@ const generateNumericPattern = (): Pattern => {
     .slice(0, 4)
     .sort(() => Math.random() - 0.5); // Mezclar
 
-  sequence[missingIndex] = "?";
+  (sequence as (number | string)[])[missingIndex] = "?";
 
   return {
     sequence,
@@ -82,10 +82,10 @@ const generateGeometricPattern = (): Pattern => {
   // Generar opciones
   const options = [...new Set([correctAnswer, ...shapeKeys.slice(0, 3)])].slice(0, 4);
 
-  sequence[missingIndex] = "?";
+  (sequence as any[])[missingIndex] = "?";
 
   return {
-    sequence: sequence.map((key) => (key === "?" ? "?" : SHAPES[key as keyof typeof SHAPES])),
+    sequence: sequence.map((key: any) => (key === "?" ? "?" : SHAPES[key as keyof typeof SHAPES])),
     missingIndex,
     correctAnswer: SHAPES[correctAnswer as keyof typeof SHAPES],
     options: options.map((key) => SHAPES[key as keyof typeof SHAPES]),

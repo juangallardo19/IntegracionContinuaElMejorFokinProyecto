@@ -136,12 +136,11 @@ export default function ColorMixer() {
             disabled={selectedColor1 === key}
             className={`
               relative h-32 rounded-2xl shadow-lg transition-all
-              ${selectedColor1 === key ? "ring-4 ring-offset-2" : "hover:shadow-xl"}
+              ${selectedColor1 === key ? "ring-4 ring-offset-2 ring-[#00a5b5]" : "hover:shadow-xl"}
               ${selectedColor1 === key && "opacity-75"}
             `}
             style={{
               backgroundColor: color.hex,
-              ringColor: "#00a5b5",
             }}
           >
             <div className="absolute inset-0 flex flex-col items-center justify-center">
