@@ -1,0 +1,48 @@
+name: CI/CD - Calidad de Software
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Ejecutar linter
+        run: npm run lint --if-present
+
+      - name: Verificar tipos TypeScript
+        run: npm run type-check --if-present
+
+      - name: Ejecutar pruebas unitarias
+        run: npm test -- --ci --coverage --maxWorkers=2
+        env:
+          CI: true
+
+      - name: Construir proyecto
+        run: npm run build
+
+      - name: Subir reporte de cobertura
+        uses: codecov/codecov-action@v3
+        if: matrix.node-version == '20.x'
+        with:
+          fail_ci_if_error: false
