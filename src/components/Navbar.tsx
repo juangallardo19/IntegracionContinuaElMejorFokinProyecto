@@ -64,53 +64,10 @@ const Navbar: React.FC = () => {
               <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
           </div>
-          <div>
-            <span style={{
-              fontSize: '1.25rem',
-              fontWeight: 'bold',
-              color: 'var(--ucc-blue)'
-            }}>
-              Mentes Creativas
-            </span>
-            <div style={{
-              fontSize: '0.7rem',
-              color: 'var(--gray-600)',
-              marginTop: '-0.25rem'
-            }}>
-              Universidad Cooperativa de Colombia
-            </div>
-          </div>
         </div>
 
         {/* Lado derecho: botón de tema */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          {/* Indicador de estadísticas */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.5rem 1rem',
-            backgroundColor: 'var(--gray-100)',
-            borderRadius: '0.5rem'
-          }}>
-            <svg
-              style={{ width: '1.25rem', height: '1.25rem', color: 'var(--ucc-green)' }}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-            </svg>
-            <span style={{
-              fontSize: '0.875rem',
-              fontWeight: '600',
-              color: 'var(--gray-700)'
-            }}>
-              3 Actividades
-            </span>
-          </div>
-
           <button
             type="button"
             onClick={toggleTheme}
