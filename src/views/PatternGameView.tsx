@@ -16,10 +16,22 @@ export default function PatternGameView() {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundColor: 'var(--gray-100)',
-        padding: '2rem 1rem'
+        padding: '2rem 1rem',
+        position: 'relative'
       }}
     >
-      <div className="educational-container">
+      {/* Overlay para reducir opacidad de la imagen de fondo */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+        zIndex: 0
+      }} />
+
+      <div className="educational-container" style={{ position: 'relative', zIndex: 1 }}>
         {/* Rompecabezas de Bloques - Primero */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -47,6 +59,13 @@ export default function PatternGameView() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
           className="feature-grid"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.85)',
+            padding: '2rem',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            marginBottom: '2rem'
+          }}
         >
           <div className="feature-card">
             <svg className="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -89,7 +108,12 @@ export default function PatternGameView() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.7 }}
           className="educational-card"
-          style={{ marginTop: '2rem' }}
+          style={{
+            marginTop: '2rem',
+            backgroundColor: 'rgba(255, 255, 255, 0.85)',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+          }}
         >
           <div className="educational-card-header">
             <h3 style={{ fontSize: '1.25rem', fontWeight: '600', margin: 0 }}>
@@ -131,6 +155,13 @@ export default function PatternGameView() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.9 }}
           className="help-section"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.85)',
+            padding: '2rem',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            marginTop: '2rem'
+          }}
         >
           <h3 className="help-title">Consejos para Identificar Patrones</h3>
           <ul className="help-list">
@@ -148,7 +179,13 @@ export default function PatternGameView() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1.1 }}
           className="info-panel success"
-          style={{ marginTop: '2rem' }}
+          style={{
+            marginTop: '2rem',
+            backgroundColor: 'rgba(255, 255, 255, 0.85)',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            padding: '2rem'
+          }}
         >
           <h4 className="info-title">Beneficios de Trabajar con Patrones</h4>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
