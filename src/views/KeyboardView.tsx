@@ -15,10 +15,22 @@ export default function KeyboardView() {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundColor: 'var(--gray-100)',
-        padding: '2rem 1rem'
+        padding: '2rem 1rem',
+        position: 'relative'
       }}
     >
-      <div className="educational-container">
+      {/* Overlay para reducir opacidad de la imagen de fondo */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+        zIndex: 0
+      }} />
+
+      <div className="educational-container" style={{ position: 'relative', zIndex: 1 }}>
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -27,7 +39,7 @@ export default function KeyboardView() {
           style={{
           textAlign: 'center',
           marginBottom: '2rem',
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          backgroundColor: 'rgba(255, 255, 255, 0.85)',
           padding: '2rem',
           borderRadius: '1rem',
           boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
@@ -66,7 +78,7 @@ export default function KeyboardView() {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="feature-grid"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            backgroundColor: 'rgba(255, 255, 255, 0.85)',
             padding: '2rem',
             borderRadius: '1rem',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
@@ -116,7 +128,7 @@ export default function KeyboardView() {
           transition={{ duration: 0.5, delay: 0.7 }}
           className="help-section"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            backgroundColor: 'rgba(255, 255, 255, 0.85)',
             padding: '2rem',
             borderRadius: '1rem',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
