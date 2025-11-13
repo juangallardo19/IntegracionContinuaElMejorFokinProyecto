@@ -24,22 +24,36 @@ const BRUSH_SIZES = [
 
 export default function DrawingCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentColor, setCurrentColor] = useState("#ef4444");
   const [brushSize, setBrushSize] = useState(5);
-  const [tool, setTool] = useState<"brush" | "eraser">("brush");
+  const [tool, setTool] = useState<"pencil" | "brush" | "eraser">("pencil");
 
-  // Inicializar canvas
+  // Inicializar canvas y ajustar tamaño
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    // Ajustar tamaño del canvas al contenedor
+    const resizeCanvas = () => {
+      const rect = container.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
 
-    // Establecer fondo blanco
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Establecer fondo blanco
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+    };
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    return () => window.removeEventListener("resize", resizeCanvas);
   }, []);
 
   // Obtener coordenadas relativas al canvas
@@ -48,18 +62,18 @@ export default function DrawingCanvas() {
     if (!canvas) return { x: 0, y: 0 };
 
     const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
 
     if ('touches' in e) {
-      // Touch event
       return {
-        x: e.touches[0].clientX - rect.left,
-        y: e.touches[0].clientY - rect.top
+        x: (e.touches[0].clientX - rect.left) * scaleX,
+        y: (e.touches[0].clientY - rect.top) * scaleY
       };
     } else {
-      // Mouse event
       return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
       };
     }
   };
@@ -77,6 +91,48 @@ export default function DrawingCanvas() {
     ctx.moveTo(x, y);
   };
 
+  // Dibujar con lápiz (líneas sólidas)
+  const drawWithPencil = (ctx: CanvasRenderingContext2D, x: number, y: number) => {
+    ctx.globalCompositeOperation = "source-over";
+    ctx.lineWidth = brushSize;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = currentColor;
+    ctx.globalAlpha = 1;
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  };
+
+  // Dibujar con pincel (difuminado/mezcla de colores)
+  const drawWithBrush = (ctx: CanvasRenderingContext2D, x: number, y: number) => {
+    ctx.globalCompositeOperation = "source-over";
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    // Crear efecto de difuminado con múltiples círculos de diferente opacidad
+    const layers = 3;
+    for (let i = 0; i < layers; i++) {
+      const layerSize = brushSize * (1 + i * 0.3);
+      const opacity = 0.3 - (i * 0.08);
+
+      ctx.globalAlpha = opacity;
+      ctx.fillStyle = currentColor;
+      ctx.beginPath();
+      ctx.arc(x, y, layerSize, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Núcleo sólido más pequeño
+    ctx.globalAlpha = 0.6;
+    ctx.fillStyle = currentColor;
+    ctx.beginPath();
+    ctx.arc(x, y, brushSize * 0.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.globalAlpha = 1;
+  };
+
   // Dibujar
   const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     if (!isDrawing) return;
@@ -87,24 +143,29 @@ export default function DrawingCanvas() {
 
     const { x, y } = getCoordinates(e);
 
-    ctx.lineWidth = brushSize;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
     if (tool === "eraser") {
       ctx.globalCompositeOperation = "destination-out";
-    } else {
-      ctx.globalCompositeOperation = "source-over";
-      ctx.strokeStyle = currentColor;
+      ctx.lineWidth = brushSize;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.globalAlpha = 1;
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    } else if (tool === "pencil") {
+      drawWithPencil(ctx, x, y);
+    } else if (tool === "brush") {
+      drawWithBrush(ctx, x, y);
     }
-
-    ctx.lineTo(x, y);
-    ctx.stroke();
   };
 
   // Terminar dibujo
   const stopDrawing = () => {
     setIsDrawing(false);
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (ctx) {
+      ctx.beginPath();
+    }
   };
 
   // Limpiar canvas
@@ -146,7 +207,17 @@ export default function DrawingCanvas() {
             <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.75rem', color: 'var(--gray-700)' }}>
               Herramienta
             </h4>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+              <button
+                onClick={() => setTool("pencil")}
+                className={`btn ${tool === "pencil" ? "btn-primary" : "btn-secondary"}`}
+                style={{ minWidth: '100px' }}
+              >
+                <svg className="icon" style={{ marginRight: '0.5rem' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                </svg>
+                Lápiz
+              </button>
               <button
                 onClick={() => setTool("brush")}
                 className={`btn ${tool === "brush" ? "btn-primary" : "btn-secondary"}`}
@@ -172,6 +243,11 @@ export default function DrawingCanvas() {
                 Borrador
               </button>
             </div>
+            <p style={{ fontSize: '0.75rem', marginTop: '0.5rem', color: 'var(--gray-600)' }}>
+              {tool === "pencil" && "Lápiz: Líneas sólidas y precisas"}
+              {tool === "brush" && "Pincel: Trazo suave con difuminado, mezcla colores"}
+              {tool === "eraser" && "Borrador: Borra tus trazos"}
+            </p>
           </div>
 
           {/* Paleta de colores */}
@@ -187,7 +263,7 @@ export default function DrawingCanvas() {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     setCurrentColor(color.hex);
-                    setTool("brush");
+                    if (tool === "eraser") setTool("pencil");
                   }}
                   style={{
                     width: '100%',
@@ -208,7 +284,7 @@ export default function DrawingCanvas() {
           {/* Tamaño del pincel */}
           <div style={{ marginBottom: '1.5rem' }}>
             <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.75rem', color: 'var(--gray-700)' }}>
-              Tamaño del Pincel
+              Tamaño
             </h4>
             <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
               {BRUSH_SIZES.map((size) => (
@@ -216,7 +292,7 @@ export default function DrawingCanvas() {
                   key={size.size}
                   onClick={() => {
                     setBrushSize(size.size);
-                    setTool("brush");
+                    if (tool === "eraser") setTool("pencil");
                   }}
                   className={`btn ${brushSize === size.size ? "btn-primary" : "btn-secondary"}`}
                   style={{ minWidth: '100px' }}
@@ -228,21 +304,23 @@ export default function DrawingCanvas() {
           </div>
         </div>
 
-        {/* Canvas */}
+        {/* Canvas - ARREGLADO para que el área dibujable coincida con el visual */}
         <div style={{ marginBottom: '2rem' }}>
-          <div style={{
-            border: '3px solid var(--ucc-blue)',
-            borderRadius: '0.5rem',
-            overflow: 'hidden',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-            backgroundColor: 'white',
-            display: 'flex',
-            justifyContent: 'center'
-          }}>
+          <div
+            ref={containerRef}
+            style={{
+              border: '3px solid var(--ucc-blue)',
+              borderRadius: '0.5rem',
+              overflow: 'hidden',
+              boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+              backgroundColor: 'white',
+              width: '100%',
+              height: '600px',
+              position: 'relative'
+            }}
+          >
             <canvas
               ref={canvasRef}
-              width={800}
-              height={600}
               onMouseDown={startDrawing}
               onMouseMove={draw}
               onMouseUp={stopDrawing}
@@ -251,10 +329,11 @@ export default function DrawingCanvas() {
               onTouchMove={draw}
               onTouchEnd={stopDrawing}
               style={{
-                cursor: tool === "brush" ? "crosshair" : "pointer",
+                cursor: tool === "pencil" ? "crosshair" : tool === "brush" ? "cell" : "pointer",
                 touchAction: "none",
-                maxWidth: '100%',
-                height: 'auto',
+                width: '100%',
+                height: '100%',
+                display: 'block'
               }}
             />
           </div>
@@ -290,10 +369,11 @@ export default function DrawingCanvas() {
         <div className="info-panel" style={{ marginTop: '2rem', borderLeftColor: 'var(--blue-500)' }}>
           <h4 className="info-title">Consejos para Dibujar</h4>
           <ul className="help-list">
+            <li><strong>Lápiz:</strong> Perfecto para líneas nítidas y detalles precisos</li>
+            <li><strong>Pincel:</strong> Ideal para pintar áreas grandes y crear efectos suaves</li>
+            <li>Mezcla colores con el pincel para crear nuevos tonos</li>
             <li>Usa trazos suaves para líneas delicadas</li>
-            <li>Combina diferentes colores para crear tu propio estilo</li>
             <li>El borrador te ayuda a corregir errores</li>
-            <li>Experimenta con diferentes tamaños de pincel</li>
             <li>Guarda tus mejores dibujos</li>
           </ul>
         </div>
