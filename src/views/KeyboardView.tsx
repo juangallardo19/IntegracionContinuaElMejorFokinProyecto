@@ -4,7 +4,7 @@ export default function KeyboardView() {
   return (
     <div style={{
       minHeight: '100vh',
-      backgroundImage: 'url(/images/technology-background.jpg)',
+      backgroundImage: 'url(/images/technology-background.png)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
