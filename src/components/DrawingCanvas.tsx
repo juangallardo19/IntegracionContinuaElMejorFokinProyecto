@@ -22,6 +22,25 @@ const BRUSH_SIZES = [
   { name: "Muy Grande", size: 20 },
 ];
 
+// Función para convertir hex a RGB
+const hexToRgb = (hex: string): [number, number, number] => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? [
+    parseInt(result[1], 16),
+    parseInt(result[2], 16),
+    parseInt(result[3], 16)
+  ] : [0, 0, 0];
+};
+
+// Función para mezclar dos colores RGB
+const mixColors = (color1: [number, number, number], color2: [number, number, number], ratio: number): [number, number, number] => {
+  return [
+    Math.round(color1[0] * (1 - ratio) + color2[0] * ratio),
+    Math.round(color1[1] * (1 - ratio) + color2[1] * ratio),
+    Math.round(color1[2] * (1 - ratio) + color2[2] * ratio)
+  ];
+};
+
 export default function DrawingCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,6 +48,8 @@ export default function DrawingCanvas() {
   const [currentColor, setCurrentColor] = useState("#ef4444");
   const [brushSize, setBrushSize] = useState(5);
   const [tool, setTool] = useState<"pencil" | "brush" | "eraser">("pencil");
+  const [lastX, setLastX] = useState(0);
+  const [lastY, setLastY] = useState(0);
 
   // Inicializar canvas y ajustar tamaño
   useEffect(() => {
@@ -86,6 +107,8 @@ export default function DrawingCanvas() {
 
     setIsDrawing(true);
     const { x, y } = getCoordinates(e);
+    setLastX(x);
+    setLastY(y);
 
     ctx.beginPath();
     ctx.moveTo(x, y);
@@ -104,33 +127,58 @@ export default function DrawingCanvas() {
     ctx.stroke();
   };
 
-  // Dibujar con pincel (difuminado/mezcla de colores)
+  // Dibujar con pincel (mezcla real de colores)
   const drawWithBrush = (ctx: CanvasRenderingContext2D, x: number, y: number) => {
-    ctx.globalCompositeOperation = "source-over";
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
+    const brushColor = hexToRgb(currentColor);
 
-    // Crear efecto de difuminado con múltiples círculos de diferente opacidad
-    const layers = 3;
-    for (let i = 0; i < layers; i++) {
-      const layerSize = brushSize * (1 + i * 0.3);
-      const opacity = 0.3 - (i * 0.08);
+    // Dibujar puntos entre la posición anterior y actual para trazo suave
+    const dx = x - lastX;
+    const dy = y - lastY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const steps = Math.max(Math.ceil(distance / 2), 1);
 
-      ctx.globalAlpha = opacity;
-      ctx.fillStyle = currentColor;
-      ctx.beginPath();
-      ctx.arc(x, y, layerSize, 0, Math.PI * 2);
-      ctx.fill();
+    for (let i = 0; i <= steps; i++) {
+      const ratio = i / steps;
+      const currentX = Math.round(lastX + dx * ratio);
+      const currentY = Math.round(lastY + dy * ratio);
+
+      // Obtener el radio del pincel
+      const radius = brushSize;
+
+      // Dibujar en el área del pincel
+      for (let offsetX = -radius; offsetX <= radius; offsetX++) {
+        for (let offsetY = -radius; offsetY <= radius; offsetY++) {
+          const pixelX = currentX + offsetX;
+          const pixelY = currentY + offsetY;
+
+          // Verificar si el pixel está dentro del círculo del pincel
+          const distanceFromCenter = Math.sqrt(offsetX * offsetX + offsetY * offsetY);
+          if (distanceFromCenter > radius) continue;
+
+          // Calcular opacidad basada en la distancia del centro (más suave en los bordes)
+          const opacity = 1 - (distanceFromCenter / radius) * 0.7; // 0.3 a 1.0
+
+          // Obtener color existente en el pixel
+          const imageData = ctx.getImageData(pixelX, pixelY, 1, 1);
+          const existingColor: [number, number, number] = [
+            imageData.data[0],
+            imageData.data[1],
+            imageData.data[2]
+          ];
+
+          // Mezclar colores (más mezcla en el centro, menos en los bordes)
+          const mixRatio = opacity * 0.4; // 40% del nuevo color como máximo
+          const finalColor = mixColors(existingColor, brushColor, mixRatio);
+
+          // Dibujar el pixel mezclado
+          ctx.fillStyle = `rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`;
+          ctx.fillRect(pixelX, pixelY, 1, 1);
+        }
+      }
     }
 
-    // Núcleo sólido más pequeño
-    ctx.globalAlpha = 0.6;
-    ctx.fillStyle = currentColor;
-    ctx.beginPath();
-    ctx.arc(x, y, brushSize * 0.5, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.globalAlpha = 1;
+    setLastX(x);
+    setLastY(y);
   };
 
   // Dibujar
@@ -245,7 +293,7 @@ export default function DrawingCanvas() {
             </div>
             <p style={{ fontSize: '0.75rem', marginTop: '0.5rem', color: 'var(--gray-600)' }}>
               {tool === "pencil" && "Lápiz: Líneas sólidas y precisas"}
-              {tool === "brush" && "Pincel: Trazo suave con difuminado, mezcla colores"}
+              {tool === "brush" && "Pincel: Trazo suave que mezcla colores, como un pincel real"}
               {tool === "eraser" && "Borrador: Borra tus trazos"}
             </p>
           </div>
@@ -370,9 +418,9 @@ export default function DrawingCanvas() {
           <h4 className="info-title">Consejos para Dibujar</h4>
           <ul className="help-list">
             <li><strong>Lápiz:</strong> Perfecto para líneas nítidas y detalles precisos</li>
-            <li><strong>Pincel:</strong> Ideal para pintar áreas grandes y crear efectos suaves</li>
-            <li>Mezcla colores con el pincel para crear nuevos tonos</li>
-            <li>Usa trazos suaves para líneas delicadas</li>
+            <li><strong>Pincel:</strong> Mezcla colores como un pincel real - pinta sobre otro color para mezclarlo</li>
+            <li>Prueba pintar amarillo sobre azul para crear verde</li>
+            <li>O rojo sobre amarillo para crear naranja</li>
             <li>El borrador te ayuda a corregir errores</li>
             <li>Guarda tus mejores dibujos</li>
           </ul>
