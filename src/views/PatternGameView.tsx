@@ -1,10 +1,7 @@
-import { useState } from "react";
 import PatternSequence from "../components/PatternSequence";
 import BlockPuzzle from "../components/BlockPuzzle";
 
 export default function PatternGameView() {
-  const [activeGame, setActiveGame] = useState<"patterns" | "puzzle">("patterns");
-
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--gray-100)', padding: '2rem 1rem' }}>
       <div className="educational-container">
@@ -28,33 +25,14 @@ export default function PatternGameView() {
           </p>
         </div>
 
-        {/* Selector de juego */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '2rem' }}>
-          <button
-            onClick={() => setActiveGame("patterns")}
-            className={`btn ${activeGame === "patterns" ? "btn-primary" : "btn-secondary"}`}
-            style={{ minWidth: '200px' }}
-          >
-            <svg className="icon" style={{ marginRight: '0.5rem' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-            </svg>
-            Secuencias y Patrones
-          </button>
-          <button
-            onClick={() => setActiveGame("puzzle")}
-            className={`btn ${activeGame === "puzzle" ? "btn-primary" : "btn-secondary"}`}
-            style={{ minWidth: '200px' }}
-          >
-            <svg className="icon" style={{ marginRight: '0.5rem' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <path d="M3 9h18M9 21V9" />
-            </svg>
-            Rompecabezas de Bloques
-          </button>
-        </div>
+        {/* Rompecabezas de Bloques - Primero */}
+        <BlockPuzzle />
 
-        {/* Componente del juego activo */}
-        {activeGame === "patterns" ? <PatternSequence /> : <BlockPuzzle />}
+        {/* Espacio entre componentes */}
+        <div style={{ height: '3rem' }} />
+
+        {/* Secuencias y Patrones - Segundo */}
+        <PatternSequence />
 
         {/* Información adicional */}
         <div className="feature-grid">

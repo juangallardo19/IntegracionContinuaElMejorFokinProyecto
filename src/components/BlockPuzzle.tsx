@@ -93,6 +93,29 @@ export default function BlockPuzzle() {
   const [draggedPiece, setDraggedPiece] = useState<Piece | null>(null);
   const [score, setScore] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [hoverPosition, setHoverPosition] = useState<{ row: number; col: number } | null>(null);
+
+  // Reproducir sonido de éxito
+  const playSuccessSound = () => {
+    try {
+      const audio = new Audio('/sounds/correct.mp3');
+      audio.volume = 0.5;
+      audio.play().catch(err => console.log('Error al reproducir sonido de éxito:', err));
+    } catch (err) {
+      console.log('Error al cargar sonido de éxito:', err);
+    }
+  };
+
+  // Reproducir sonido de error
+  const playErrorSound = () => {
+    try {
+      const audio = new Audio('/sounds/incorrect.mp3');
+      audio.volume = 0.3; // Volumen más bajo para que no sea tan duro
+      audio.play().catch(err => console.log('Error al reproducir sonido de error:', err));
+    } catch (err) {
+      console.log('Error al cargar sonido de error:', err);
+    }
+  };
 
   // Iniciar nuevo nivel
   const startLevel = (levelIndex: number) => {
@@ -167,12 +190,47 @@ export default function BlockPuzzle() {
     if (draggedPiece) {
       placePiece(draggedPiece, row, col);
       setDraggedPiece(null);
+      setHoverPosition(null);
     }
+  };
+
+  // Manejar hover sobre el tablero
+  const handleDragOver = (row: number, col: number) => {
+    if (draggedPiece && canPlacePiece(draggedPiece.shape, row, col)) {
+      setHoverPosition({ row, col });
+    } else {
+      setHoverPosition(null);
+    }
+  };
+
+  // Verificar si una celda está en la zona de hover
+  const isInHoverZone = (row: number, col: number): boolean => {
+    if (!hoverPosition || !draggedPiece) return false;
+
+    for (let r = 0; r < draggedPiece.shape.length; r++) {
+      for (let c = 0; c < draggedPiece.shape[r].length; c++) {
+        if (draggedPiece.shape[r][c] === 1) {
+          if (hoverPosition.row + r === row && hoverPosition.col + c === col) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   };
 
   // Reiniciar nivel
   const resetLevel = () => {
+    playErrorSound();
     startLevel(currentLevel);
+  };
+
+  // Avanzar al siguiente nivel
+  const nextLevel = () => {
+    if (currentLevel < LEVELS.length - 1) {
+      playSuccessSound();
+      startLevel(currentLevel + 1);
+    }
   };
 
   // Obtener color de la celda
@@ -232,21 +290,29 @@ export default function BlockPuzzle() {
             border: '3px solid var(--ucc-blue)',
           }}>
             {board.map((row, rowIndex) =>
-              row.map((cell, colIndex) => (
-                <div
-                  key={`${rowIndex}-${colIndex}`}
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={() => handleDrop(rowIndex, colIndex)}
-                  style={{
-                    aspectRatio: '1',
-                    backgroundColor: cell === 0 ? 'white' : getCellColor(cell),
-                    border: '1px solid var(--gray-200)',
-                    borderRadius: '2px',
-                    transition: 'all 0.2s',
-                    cursor: draggedPiece ? 'pointer' : 'default',
-                  }}
-                />
-              ))
+              row.map((cell, colIndex) => {
+                const inHoverZone = isInHoverZone(rowIndex, colIndex);
+                return (
+                  <div
+                    key={`${rowIndex}-${colIndex}`}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      handleDragOver(rowIndex, colIndex);
+                    }}
+                    onDrop={() => handleDrop(rowIndex, colIndex)}
+                    style={{
+                      aspectRatio: '1',
+                      backgroundColor: cell === 0
+                        ? (inHoverZone ? 'rgba(59, 130, 246, 0.3)' : 'white')
+                        : getCellColor(cell),
+                      border: '1px solid var(--gray-200)',
+                      borderRadius: '2px',
+                      transition: 'all 0.2s',
+                      cursor: draggedPiece ? 'pointer' : 'default',
+                    }}
+                  />
+                );
+              })
             )}
           </div>
         </div>
@@ -338,7 +404,7 @@ export default function BlockPuzzle() {
 
           {currentLevel < LEVELS.length - 1 && (
             <button
-              onClick={() => startLevel(currentLevel + 1)}
+              onClick={nextLevel}
               className="btn btn-primary"
             >
               Nivel Siguiente
