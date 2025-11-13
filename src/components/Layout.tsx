@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import BackgroundMusic from "./BackgroundMusic";
 
 export default function Layout() {
   return (
@@ -18,6 +19,9 @@ export default function Layout() {
           <Outlet />
         </main>
       </div>
+
+      {/* Música de fondo */}
+      <BackgroundMusic />
     </div>
   );
 }
