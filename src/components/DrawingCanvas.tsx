@@ -117,64 +117,52 @@ export default function DrawingCanvas() {
   // Dibujar con lápiz (líneas sólidas)
   const drawWithPencil = (ctx: CanvasRenderingContext2D, x: number, y: number) => {
     ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = 1;
     ctx.lineWidth = brushSize;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.strokeStyle = currentColor;
-    ctx.globalAlpha = 1;
 
     ctx.lineTo(x, y);
     ctx.stroke();
   };
 
-  // Dibujar con pincel (mezcla real de colores)
+  // Dibujar con pincel (efecto acuarela)
   const drawWithBrush = (ctx: CanvasRenderingContext2D, x: number, y: number) => {
-    const brushColor = hexToRgb(currentColor);
-
-    // Dibujar puntos entre la posición anterior y actual para trazo suave
+    // Calcular puntos intermedios para trazo suave
     const dx = x - lastX;
     const dy = y - lastY;
     const distance = Math.sqrt(dx * dx + dy * dy);
-    const steps = Math.max(Math.ceil(distance / 2), 1);
+    const steps = Math.max(Math.ceil(distance / 3), 1);
 
     for (let i = 0; i <= steps; i++) {
       const ratio = i / steps;
-      const currentX = Math.round(lastX + dx * ratio);
-      const currentY = Math.round(lastY + dy * ratio);
+      const currentX = lastX + dx * ratio;
+      const currentY = lastY + dy * ratio;
 
-      // Obtener el radio del pincel
-      const radius = brushSize;
+      // Crear efecto acuarela con gradiente radial y transparencia
+      const radius = brushSize * 2;
+      const gradient = ctx.createRadialGradient(
+        currentX, currentY, 0,
+        currentX, currentY, radius
+      );
 
-      // Dibujar en el área del pincel
-      for (let offsetX = -radius; offsetX <= radius; offsetX++) {
-        for (let offsetY = -radius; offsetY <= radius; offsetY++) {
-          const pixelX = currentX + offsetX;
-          const pixelY = currentY + offsetY;
+      // Convertir color hex a rgba para transparencia
+      const rgb = hexToRgb(currentColor);
 
-          // Verificar si el pixel está dentro del círculo del pincel
-          const distanceFromCenter = Math.sqrt(offsetX * offsetX + offsetY * offsetY);
-          if (distanceFromCenter > radius) continue;
+      // Gradiente suave desde el centro hacia afuera (efecto acuarela)
+      gradient.addColorStop(0, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.15)`);
+      gradient.addColorStop(0.5, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.08)`);
+      gradient.addColorStop(1, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0)`);
 
-          // Calcular opacidad basada en la distancia del centro (más suave en los bordes)
-          const opacity = 1 - (distanceFromCenter / radius) * 0.7; // 0.3 a 1.0
+      // Configurar el estilo de dibujo
+      ctx.fillStyle = gradient;
+      ctx.globalCompositeOperation = "multiply"; // Mezcla los colores como acuarela real
 
-          // Obtener color existente en el pixel
-          const imageData = ctx.getImageData(pixelX, pixelY, 1, 1);
-          const existingColor: [number, number, number] = [
-            imageData.data[0],
-            imageData.data[1],
-            imageData.data[2]
-          ];
-
-          // Mezclar colores (más mezcla en el centro, menos en los bordes)
-          const mixRatio = opacity * 0.4; // 40% del nuevo color como máximo
-          const finalColor = mixColors(existingColor, brushColor, mixRatio);
-
-          // Dibujar el pixel mezclado
-          ctx.fillStyle = `rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`;
-          ctx.fillRect(pixelX, pixelY, 1, 1);
-        }
-      }
+      // Dibujar círculo con gradiente
+      ctx.beginPath();
+      ctx.arc(currentX, currentY, radius, 0, Math.PI * 2);
+      ctx.fill();
     }
 
     setLastX(x);
@@ -193,10 +181,10 @@ export default function DrawingCanvas() {
 
     if (tool === "eraser") {
       ctx.globalCompositeOperation = "destination-out";
+      ctx.globalAlpha = 1;
       ctx.lineWidth = brushSize;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
-      ctx.globalAlpha = 1;
       ctx.lineTo(x, y);
       ctx.stroke();
     } else if (tool === "pencil") {
@@ -293,7 +281,7 @@ export default function DrawingCanvas() {
             </div>
             <p style={{ fontSize: '0.75rem', marginTop: '0.5rem', color: 'var(--gray-600)' }}>
               {tool === "pencil" && "Lápiz: Líneas sólidas y precisas"}
-              {tool === "brush" && "Pincel: Trazo suave que mezcla colores, como un pincel real"}
+              {tool === "brush" && "Pincel: Efecto acuarela que mezcla colores de forma suave y transparente"}
               {tool === "eraser" && "Borrador: Borra tus trazos"}
             </p>
           </div>
@@ -418,7 +406,8 @@ export default function DrawingCanvas() {
           <h4 className="info-title">Consejos para Dibujar</h4>
           <ul className="help-list">
             <li><strong>Lápiz:</strong> Perfecto para líneas nítidas y detalles precisos</li>
-            <li><strong>Pincel:</strong> Mezcla colores como un pincel real - pinta sobre otro color para mezclarlo</li>
+            <li><strong>Pincel Acuarela:</strong> Crea trazos suaves y transparentes que se mezclan como pintura real</li>
+            <li>Pinta varias veces sobre el mismo lugar para colores más intensos</li>
             <li>Prueba pintar amarillo sobre azul para crear verde</li>
             <li>O rojo sobre amarillo para crear naranja</li>
             <li>El borrador te ayuda a corregir errores</li>
