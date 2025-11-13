@@ -9,7 +9,15 @@ export default function PatternGameView() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      style={{ minHeight: '100vh', backgroundColor: 'var(--gray-100)', padding: '2rem 1rem' }}
+      style={{
+        minHeight: '100vh',
+        backgroundImage: 'url(/images/logic-background.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor: 'var(--gray-100)',
+        padding: '2rem 1rem'
+      }}
     >
       <div className="educational-container">
         {/* Rompecabezas de Bloques - Primero */}
