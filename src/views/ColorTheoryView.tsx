@@ -10,23 +10,23 @@ export default function ColorTheoryView() {
       transition={{ duration: 0.3 }}
       style={{
         minHeight: '100vh',
-        backgroundImage: 'url(/images/art-background.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
         backgroundColor: 'var(--gray-100)',
         padding: '2rem 1rem',
         position: 'relative'
       }}
     >
-      {/* Overlay para reducir opacidad de la imagen de fondo */}
+      {/* Imagen de fondo PNG con opacidad reducida */}
       <div style={{
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+        backgroundImage: 'url(/images/art-background.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        opacity: 0.3,
         zIndex: 0
       }} />
 
