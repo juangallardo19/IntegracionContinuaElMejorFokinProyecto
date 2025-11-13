@@ -2,10 +2,37 @@ import KeyboardGame from "../components/KeyboardGame";
 
 export default function KeyboardView() {
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--gray-100)', padding: '2rem 1rem' }}>
-      <div className="educational-container">
+    <div style={{
+      minHeight: '100vh',
+      backgroundImage: 'url(/images/technology-background.jpg)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundColor: 'var(--gray-100)',
+      padding: '2rem 1rem',
+      position: 'relative'
+    }}>
+      {/* Overlay para mejorar la legibilidad */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(255, 255, 255, 0.85)',
+        zIndex: 0
+      }} />
+
+      <div className="educational-container" style={{ position: 'relative', zIndex: 1 }}>
         {/* Hero Section */}
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        <div style={{
+          textAlign: 'center',
+          marginBottom: '2rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          padding: '2rem',
+          borderRadius: '1rem',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        }}>
           <h1 style={{
             fontSize: '2.5rem',
             fontWeight: 'bold',
@@ -28,7 +55,13 @@ export default function KeyboardView() {
         <KeyboardGame />
 
         {/* Información adicional */}
-        <div className="feature-grid">
+        <div className="feature-grid" style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          padding: '2rem',
+          borderRadius: '1rem',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          marginBottom: '2rem'
+        }}>
           <div className="feature-card">
             <svg className="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="2" y="4" width="20" height="16" rx="2" />
@@ -66,7 +99,12 @@ export default function KeyboardView() {
         </div>
 
         {/* Tips educativos */}
-        <div className="help-section">
+        <div className="help-section" style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          padding: '2rem',
+          borderRadius: '1rem',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        }}>
           <h3 className="help-title">Consejos para Mejorar</h3>
           <ul className="help-list">
             <li>Mantén una postura correcta frente al teclado</li>

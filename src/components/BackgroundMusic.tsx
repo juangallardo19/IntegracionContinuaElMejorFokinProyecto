@@ -11,6 +11,9 @@ export default function BackgroundMusic() {
     const audio = audioRef.current;
     if (!audio) return;
 
+    // Configurar volumen muy bajo
+    audio.volume = 0.15; // 15% del volumen máximo
+
     // Intentar reproducir automáticamente
     const playAudio = async () => {
       try {
@@ -18,8 +21,18 @@ export default function BackgroundMusic() {
         setIsPlaying(true);
       } catch (error) {
         // Si falla la reproducción automática (política del navegador),
-        // esperamos a que el usuario interactúe
+        // intentar de nuevo en el primer click del usuario
         console.log("Autoplay bloqueado - esperando interacción del usuario");
+        const handleFirstInteraction = async () => {
+          try {
+            await audio.play();
+            setIsPlaying(true);
+            document.removeEventListener('click', handleFirstInteraction);
+          } catch (e) {
+            console.log("No se pudo reproducir el audio");
+          }
+        };
+        document.addEventListener('click', handleFirstInteraction, { once: true });
       }
     };
 
