@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 // Definición del layout del teclado (simplificado para niños)
 const KEYBOARD_LAYOUT = [
@@ -20,6 +20,7 @@ export default function KeyboardGame() {
   const [errors, setErrors] = useState(0);
   const [message, setMessage] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
+  const incorrectAudioRef = useRef<HTMLAudioElement | null>(null);
 
   // Generar nueva palabra al iniciar
   const startGame = () => {
@@ -57,7 +58,7 @@ export default function KeyboardGame() {
         } else {
           // Palabra completada - incrementar índice para mostrar la última letra en verde
           setCurrentLetterIndex(prev => prev + 1);
-          setMessage("¡Palabra completada! 🎉");
+          setMessage("Palabra completada");
           setTimeout(() => {
             const newWord = PRACTICE_WORDS[Math.floor(Math.random() * PRACTICE_WORDS.length)];
             setCurrentWord(newWord);
@@ -88,11 +89,19 @@ export default function KeyboardGame() {
     }
   };
 
-  // Reproducir sonido de error
+  // Reproducir sonido de error (cancela el anterior si está sonando)
   const playErrorSound = () => {
     try {
+      // Si ya hay un sonido de error reproduciéndose, lo pausamos y reiniciamos
+      if (incorrectAudioRef.current) {
+        incorrectAudioRef.current.pause();
+        incorrectAudioRef.current.currentTime = 0;
+      }
+
+      // Crear nuevo audio
       const audio = new Audio('/sounds/incorrect.mp3');
-      audio.volume = 0.5; // Volumen al 50%
+      audio.volume = 0.3; // Volumen más bajo para que no sea tan duro
+      incorrectAudioRef.current = audio;
       audio.play().catch(err => console.log('Error al reproducir sonido de error:', err));
     } catch (err) {
       console.log('Error al cargar sonido de error:', err);

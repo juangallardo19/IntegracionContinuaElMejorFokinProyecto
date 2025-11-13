@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 
 // Tipos de patrones
@@ -139,6 +139,7 @@ export default function PatternSequence() {
   const [score, setScore] = useState(0);
   const [attempts, setAttempts] = useState(0);
   const [showExplanation, setShowExplanation] = useState(false);
+  const incorrectAudioRef = useRef<HTMLAudioElement | null>(null);
 
   // Generar nuevo patrón
   const generateNewPattern = () => {
@@ -171,13 +172,34 @@ export default function PatternSequence() {
     }
   };
 
-  // Simular sonidos
+  // Reproducir sonido de éxito
   const playSuccessSound = () => {
-    console.log("Sonido de respuesta correcta");
+    try {
+      const audio = new Audio('/sounds/correct.mp3');
+      audio.volume = 0.5;
+      audio.play().catch(err => console.log('Error al reproducir sonido de éxito:', err));
+    } catch (err) {
+      console.log('Error al cargar sonido de éxito:', err);
+    }
   };
 
+  // Reproducir sonido de error (cancela el anterior si está sonando)
   const playErrorSound = () => {
-    console.log("Sonido de error");
+    try {
+      // Si ya hay un sonido de error reproduciéndose, lo pausamos y reiniciamos
+      if (incorrectAudioRef.current) {
+        incorrectAudioRef.current.pause();
+        incorrectAudioRef.current.currentTime = 0;
+      }
+
+      // Crear nuevo audio
+      const audio = new Audio('/sounds/incorrect.mp3');
+      audio.volume = 0.3; // Volumen más bajo para que no sea tan duro
+      incorrectAudioRef.current = audio;
+      audio.play().catch(err => console.log('Error al reproducir sonido de error:', err));
+    } catch (err) {
+      console.log('Error al cargar sonido de error:', err);
+    }
   };
 
   return (
