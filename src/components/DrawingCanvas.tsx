@@ -47,7 +47,7 @@ export default function DrawingCanvas() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentColor, setCurrentColor] = useState("#ef4444");
   const [brushSize, setBrushSize] = useState(5);
-  const [tool, setTool] = useState<"pencil" | "brush" | "eraser">("pencil");
+  const [tool, setTool] = useState<"pencil" | "spray" | "eraser">("pencil");
   const [lastX, setLastX] = useState(0);
   const [lastY, setLastY] = useState(0);
 
@@ -127,8 +127,8 @@ export default function DrawingCanvas() {
     ctx.stroke();
   };
 
-  // Dibujar con pincel (efecto acuarela)
-  const drawWithBrush = (ctx: CanvasRenderingContext2D, x: number, y: number) => {
+  // Dibujar con spray (efecto difuminado)
+  const drawWithSpray = (ctx: CanvasRenderingContext2D, x: number, y: number) => {
     // Calcular puntos intermedios para trazo suave
     const dx = x - lastX;
     const dy = y - lastY;
@@ -140,7 +140,7 @@ export default function DrawingCanvas() {
       const currentX = lastX + dx * ratio;
       const currentY = lastY + dy * ratio;
 
-      // Crear efecto acuarela con gradiente radial y transparencia
+      // Crear efecto spray con gradiente radial y transparencia
       const radius = brushSize * 2;
       const gradient = ctx.createRadialGradient(
         currentX, currentY, 0,
@@ -150,14 +150,14 @@ export default function DrawingCanvas() {
       // Convertir color hex a rgba para transparencia
       const rgb = hexToRgb(currentColor);
 
-      // Gradiente suave desde el centro hacia afuera (efecto acuarela)
+      // Gradiente suave desde el centro hacia afuera (efecto spray)
       gradient.addColorStop(0, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.15)`);
       gradient.addColorStop(0.5, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.08)`);
       gradient.addColorStop(1, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0)`);
 
       // Configurar el estilo de dibujo
       ctx.fillStyle = gradient;
-      ctx.globalCompositeOperation = "multiply"; // Mezcla los colores como acuarela real
+      ctx.globalCompositeOperation = "multiply"; // Mezcla los colores
 
       // Dibujar círculo con gradiente
       ctx.beginPath();
@@ -189,8 +189,8 @@ export default function DrawingCanvas() {
       ctx.stroke();
     } else if (tool === "pencil") {
       drawWithPencil(ctx, x, y);
-    } else if (tool === "brush") {
-      drawWithBrush(ctx, x, y);
+    } else if (tool === "spray") {
+      drawWithSpray(ctx, x, y);
     }
   };
 
@@ -210,6 +210,9 @@ export default function DrawingCanvas() {
     const ctx = canvas?.getContext("2d");
     if (!ctx || !canvas) return;
 
+    // Restablecer el modo de composición antes de limpiar
+    ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = 1;
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   };
@@ -255,17 +258,21 @@ export default function DrawingCanvas() {
                 Lápiz
               </button>
               <button
-                onClick={() => setTool("brush")}
-                className={`btn ${tool === "brush" ? "btn-primary" : "btn-secondary"}`}
+                onClick={() => setTool("spray")}
+                className={`btn ${tool === "spray" ? "btn-primary" : "btn-secondary"}`}
                 style={{ minWidth: '100px' }}
               >
                 <svg className="icon" style={{ marginRight: '0.5rem' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M12 19l7-7 3 3-7 7-3-3z" />
-                  <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
-                  <path d="M2 2l7.586 7.586" />
-                  <circle cx="11" cy="11" r="2" />
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="8" cy="10" r="1" />
+                  <circle cx="16" cy="10" r="1" />
+                  <circle cx="10" cy="15" r="1" />
+                  <circle cx="14" cy="15" r="1" />
+                  <circle cx="12" cy="8" r="1" />
+                  <circle cx="6" cy="14" r="1" />
+                  <circle cx="18" cy="14" r="1" />
                 </svg>
-                Pincel
+                Spray
               </button>
               <button
                 onClick={() => setTool("eraser")}
@@ -281,7 +288,7 @@ export default function DrawingCanvas() {
             </div>
             <p style={{ fontSize: '0.75rem', marginTop: '0.5rem', color: 'var(--gray-600)' }}>
               {tool === "pencil" && "Lápiz: Líneas sólidas y precisas"}
-              {tool === "brush" && "Pincel: Efecto acuarela que mezcla colores de forma suave y transparente"}
+              {tool === "spray" && "Spray: Efecto difuminado que mezcla colores de forma suave y transparente"}
               {tool === "eraser" && "Borrador: Borra tus trazos"}
             </p>
           </div>
@@ -299,7 +306,7 @@ export default function DrawingCanvas() {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     setCurrentColor(color.hex);
-                    if (tool === "eraser") setTool("pencil");
+                    if (tool === "eraser") setTool("spray");
                   }}
                   style={{
                     width: '100%',
@@ -326,10 +333,7 @@ export default function DrawingCanvas() {
               {BRUSH_SIZES.map((size) => (
                 <button
                   key={size.size}
-                  onClick={() => {
-                    setBrushSize(size.size);
-                    if (tool === "eraser") setTool("pencil");
-                  }}
+                  onClick={() => setBrushSize(size.size)}
                   className={`btn ${brushSize === size.size ? "btn-primary" : "btn-secondary"}`}
                   style={{ minWidth: '100px' }}
                 >
@@ -365,7 +369,7 @@ export default function DrawingCanvas() {
               onTouchMove={draw}
               onTouchEnd={stopDrawing}
               style={{
-                cursor: tool === "pencil" ? "crosshair" : tool === "brush" ? "cell" : "pointer",
+                cursor: tool === "pencil" ? "crosshair" : tool === "spray" ? "cell" : "pointer",
                 touchAction: "none",
                 width: '100%',
                 height: '100%',
@@ -406,7 +410,7 @@ export default function DrawingCanvas() {
           <h4 className="info-title">Consejos para Dibujar</h4>
           <ul className="help-list">
             <li><strong>Lápiz:</strong> Perfecto para líneas nítidas y detalles precisos</li>
-            <li><strong>Pincel Acuarela:</strong> Crea trazos suaves y transparentes que se mezclan como pintura real</li>
+            <li><strong>Spray:</strong> Crea trazos suaves y difuminados que se mezclan</li>
             <li>Pinta varias veces sobre el mismo lugar para colores más intensos</li>
             <li>Prueba pintar amarillo sobre azul para crear verde</li>
             <li>O rojo sobre amarillo para crear naranja</li>
