@@ -1,31 +1,30 @@
+import { motion } from "framer-motion";
 import KeyboardGame from "../components/KeyboardGame";
 
 export default function KeyboardView() {
   return (
-    <div style={{
-      minHeight: '100vh',
-      backgroundImage: 'url(/images/technology-background.png)',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      backgroundColor: 'var(--gray-100)',
-      padding: '2rem 1rem',
-      position: 'relative'
-    }}>
-      {/* Overlay para mejorar la legibilidad */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(255, 255, 255, 0.85)',
-        zIndex: 0
-      }} />
-
-      <div className="educational-container" style={{ position: 'relative', zIndex: 1 }}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      style={{
+        minHeight: '100vh',
+        backgroundImage: 'url(/images/technology-background.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor: 'var(--gray-100)',
+        padding: '2rem 1rem'
+      }}
+    >
+      <div className="educational-container">
         {/* Hero Section */}
-        <div style={{
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          style={{
           textAlign: 'center',
           marginBottom: '2rem',
           backgroundColor: 'rgba(255, 255, 255, 0.95)',
@@ -49,19 +48,31 @@ export default function KeyboardView() {
           }}>
             Aprende a usar el teclado de manera divertida y mejora tus habilidades de mecanografía
           </p>
-        </div>
+        </motion.div>
 
         {/* Componente del juego */}
-        <KeyboardGame />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <KeyboardGame />
+        </motion.div>
 
         {/* Información adicional */}
-        <div className="feature-grid" style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          padding: '2rem',
-          borderRadius: '1rem',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-          marginBottom: '2rem'
-        }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="feature-grid"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            padding: '2rem',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            marginBottom: '2rem'
+          }}
+        >
           <div className="feature-card">
             <svg className="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="2" y="4" width="20" height="16" rx="2" />
@@ -96,15 +107,21 @@ export default function KeyboardView() {
               Practica con diferentes palabras y sigue mejorando
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* Tips educativos */}
-        <div className="help-section" style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
-          padding: '2rem',
-          borderRadius: '1rem',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-        }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+          className="help-section"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            padding: '2rem',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+          }}
+        >
           <h3 className="help-title">Consejos para Mejorar</h3>
           <ul className="help-list">
             <li>Mantén una postura correcta frente al teclado</li>
@@ -112,8 +129,8 @@ export default function KeyboardView() {
             <li>Practica todos los días unos minutos para mejorar</li>
             <li>No te preocupes por los errores, son parte del aprendizaje</li>
           </ul>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
